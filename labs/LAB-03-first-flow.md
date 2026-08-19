@@ -130,7 +130,7 @@ Dodaj `Update item` dla Contracts:
 - Status: `InApproval`,
 - pozostałe wymagane pola zmapuj z triggera.
 
-> Uwaga: to Update ponownie spełni trigger „created or modified”. Drugi run powinien zakończyć się, ponieważ Status nie jest już `Submitted`. W LAB 09 wykorzystamy tę sytuację do diagnostyki.
+> to Update ponownie spełni trigger „created or modified”. Drugi run powinien zakończyć się, ponieważ Status nie jest już `Submitted`. W LAB 09 wykorzystamy tę sytuację do diagnostyki.
 
 ---
 

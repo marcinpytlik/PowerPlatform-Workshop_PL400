@@ -266,7 +266,7 @@ Minimum:
 - Valid To,
 - External System ID.
 
-> Auditing może wymagać włączenia na poziomie środowiska. Jeżeli uczestnik nie ma uprawnień administratora, prowadzący pokazuje część administracyjną, a uczestnik konfiguruje tabelę w zakresie dostępnych uprawnień.
+> Auditing może wymagać włączenia na poziomie środowiska. 
 
 Po włączeniu:
 

@@ -2,15 +2,15 @@
 
 ## Zasada prowadzenia
 
-Nie pokazuj funkcji jako oderwanych elementów. Każdy nowy mechanizm powinien wynikać z problemu, który pojawił się w rozwijanej aplikacji.
+Nie pokazywać funkcji jako oderwanych elementów. Każdy nowy mechanizm powinien wynikać z problemu, który pojawił się w rozwijanej aplikacji.
 
 ## Moment 1 – SharePoint
 
-Pozwól uczestnikom zauważyć, że rozwiązanie działa, ale model danych i proces stają się coraz trudniejsze do utrzymania.
+Pozwolic uczestnikom zauważyć, że rozwiązanie działa, ale model danych i proces stają się coraz trudniejsze do utrzymania.
 
 ## Moment 2 – Dataverse
 
-Nie przedstawiaj Dataverse jako "lepszego SharePointa". Pokaż relacje, security, auditing i model danych.
+Nie przedstawiać Dataverse jako "lepszego SharePointa". Pokazać relacje, security, auditing i model danych.
 
 ## Moment 3 – jeden duży flow
 
@@ -25,7 +25,7 @@ Celowo wywołaj:
 - ponowne wyzwolenie flow przez Update,
 - dwa równoległe uruchomienia.
 
-Nie pokazuj od razu rozwiązania. Najpierw diagnoza.
+Nie pokazywac od razu rozwiązania. Najpierw diagnoza.
 
 ## Moment 5 – ALM
 

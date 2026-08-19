@@ -34,7 +34,7 @@ Ukończony LAB 01.
 5. Nazwa: `VCM - Contract Portal`.
 6. Zapisz aplikację.
 
-> Jeśli w danym tenantcie dostępny jest nowszy start z danych, możesz również utworzyć Canvas App na podstawie listy `Contracts`, ale podczas szkolenia rekomendowane jest rozpoczęcie od pustej aplikacji – uczestnik lepiej widzi architekturę.
+> W tenantcie jest nowszy start z danych, można również utworzyć Canvas App na podstawie listy `Contracts`, ale podczas szkolenia zrobic rozpoczęcie od pustej aplikacji – uczestnik lepiej widzi architekturę.
 
 ---
 
@@ -94,7 +94,7 @@ SortByColumns(
 )
 ```
 
-> Jeśli Twoja kontrolka statusu zwraca `SelectedText.Value` albo inną właściwość, dopasuj formułę do typu kontrolki. Celem ćwiczenia jest zrozumienie filtra, nie zapamiętanie jednej wersji kontrolki.
+> Jeśli kontrolka statusu zwraca `SelectedText.Value` albo inną właściwość, dopasuj formułę do typu kontrolki. Celem ćwiczenia jest zrozumienie filtra, nie zapamiętanie jednej wersji kontrolki.
 
 W galerii pokaż:
 

@@ -27,7 +27,7 @@ Laboratorium obejmuje:
 - endpoint demonstracyjny prowadzącego lub mock API,
 - możliwość użycia akcji HTTP w środowisku szkoleniowym.
 
-> Akcja HTTP może wymagać odpowiedniej licencji. Jeżeli tenant jej nie udostępnia, prowadzący może wykonać demo, a uczestnicy przeanalizować flow i payload.
+> Akcja HTTP może wymagać odpowiedniej licencji. 
 
 ---
 
