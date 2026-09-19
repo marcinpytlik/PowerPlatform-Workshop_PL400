@@ -10,16 +10,16 @@
 
 ## Statusy umowy
 
+Status umowy opisuje stan całego procesu biznesowego. Szczegóły poszczególnych akceptacji są przechowywane w rekordach Approval, a nie jako osobne statusy umowy.
+
 - Draft
 - Submitted
-- Legal Review
-- Financial Review
-- Management Approval
+- In Approval
 - Approved
 - Rejected
 - Integration Pending
 - Integrated
-- Error
+- Integration Error
 
 ## Reguły przykładowe
 
