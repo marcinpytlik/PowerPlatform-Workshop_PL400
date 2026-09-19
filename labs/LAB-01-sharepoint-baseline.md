@@ -294,6 +294,10 @@ LAB jest ukończony, gdy:
 - indeksy zostały utworzone,
 - istnieje co najmniej pięć umów testowych.
 
+## Po tym LAB
+
+Nazwij ograniczenia SharePoint jako źródła prawdy. Wzorzec **Strangler Migration** zostaw na LAB 06 – dziś tylko ból, nie lek.
+
 ---
 
 # Pytania do dyskusji

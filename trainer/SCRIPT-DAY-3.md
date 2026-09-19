@@ -5,6 +5,7 @@
 **Laby obowiązkowe:** 09, 10, 12, 13 (wariant skrócony).
 **LAB 11:** wariant 30–45 min, nie pełne 90.
 **Monitor:** krótki blok przed wydajnością.
+**Teoria:** [THEORY-TALK-TRACK](THEORY-TALK-TRACK.md) dzień 3. Nie wykładaj sagi ani circuit breakera.
 
 ## Przygotowanie (08:40)
 
@@ -31,6 +32,8 @@ Nie kończ CATCH akcją Terminate – to najczęstszy błąd sali.
 
 **Checkpoint:** jest rekord Process Log z Flow Run ID i Correlation ID.
 
+**Talk track:** TRY/CATCH/FINALLY, business vs technical, append-only log. `Needs Manual Review` to pomysł recovery, nie nowy Choice do modelu VCM.
+
 ---
 
 ## 10:15–11:15 – LAB 10 troubleshooting (60 min)
@@ -46,6 +49,8 @@ Zasada, którą powtarzasz na głos:
 Szczegóły odtworzenia: [DEMO-FAILURES](DEMO-FAILURES.md).
 
 **Checkpoint:** uczestnik ma wypełniony raport incydentu, nie tylko „naprawiłem status”.
+
+**Talk track (5 min):** Observability. Na tablicy: Business ID + Correlation ID + Flow Run ID + Process Log.
 
 ---
 
@@ -77,6 +82,8 @@ Reszta labu (indeks, concurrency, 50 000 rekordów) jest materiałem własnym al
 
 **Checkpoint:** liczba rekordów i czas spadły po Filter Query.
 
+**Talk track:** Delegation First, Lazy Loading, N+1. Brak błędu ≠ poprawny wynik.
+
 ---
 
 ## 12:30–13:00 – Lunch
@@ -100,6 +107,8 @@ Kolejność:
 Jeżeli child flows nie przejdą: zostaje jeden orchestrator, ale URL jest w zmiennej środowiskowej. To wystarczy do LAB 13.
 
 **Checkpoint:** `VCM_API_BASE_URL` nie siedzi w akcji HTTP jako literał.
+
+**Talk track:** Configuration over Hard-code, Environment Variables, Connection References. Solution jest przenośnym artefaktem, nie kopią DEV.
 
 ---
 

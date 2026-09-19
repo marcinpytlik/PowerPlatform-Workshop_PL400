@@ -363,6 +363,10 @@ Oczekiwane: CATCH wykona się dla Timed out.
 - stan Contract odzwierciedla błąd integracji,
 - techniczny failure kończy flow jako Failed.
 
+## Po tym LAB
+
+Talk track: TRY/CATCH/FINALLY, błąd biznesowy vs techniczny, append-only Process Log. `Needs Manual Review` jest pomysłem recovery, nie nowym statusem w modelu VCM.
+
 ---
 
 # Materiał Microsoft

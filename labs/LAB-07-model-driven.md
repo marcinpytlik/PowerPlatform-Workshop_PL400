@@ -253,6 +253,10 @@ Scenariusz administratora:
 - istnieją widoki Active Contracts i Integration Errors,
 - uczestnik potrafi wyjaśnić różnicę Canvas vs Model-driven w tym samym rozwiązaniu.
 
+## Po tym LAB
+
+Talk track: **Model-driven Administration**. Canvas i Model-driven nie konkurują – różne role, to samo Dataverse.
+
 ---
 
 # Materiał Microsoft

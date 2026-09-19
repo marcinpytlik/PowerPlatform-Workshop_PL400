@@ -5,6 +5,7 @@
 **Laby obowiązkowe:** 05, 06, 07.
 **LAB 08:** opcjonalny, tylko gdy grupa jedzie zgodnie z planem.
 **Design flowów:** rysunek i nazwy, pełna refaktoryzacja zostaje na LAB 12.
+**Teoria:** [THEORY-TALK-TRACK](THEORY-TALK-TRACK.md) dzień 2. Strangler w trakcie LAB 06, nie jako osobny wykład.
 
 ## Przygotowanie (08:40)
 
@@ -17,6 +18,15 @@
 ## 09:00–10:45 – LAB 05 Dataverse (105 min)
 
 To jest najdłuższy lab warsztatu. Nie skracaj alternate keys i audytu.
+
+**Talk track (pierwsze 10 min):** Source of Truth, State Machine. Na tablicy pełna ścieżka VCM, nie skrót do Approved:
+
+```text
+Draft -> Submitted -> In Approval -> Approved
+                                 -> Rejected
+Approved -> Integration Pending -> Integrated
+                                -> Integration Error
+```
 
 Kolejność prowadzenia:
 
@@ -58,6 +68,8 @@ Jeżeli ktoś nie dowiezie flow do 12:20: Canvas na Dataverse + trigger Datavers
 
 **Checkpoint:** nowa umowa z Canvas ląduje w Dataverse, nie na liście SharePoint. Stary flow jest Off.
 
+**Talk track w trakcie, nie po:** nazwij to **Strangler Migration**. Stary model działa, nowy budujemy obok, przepinamy ekran po ekranie, regresja, dopiero Off.
+
 ---
 
 ## 12:30–13:00 – Lunch
@@ -77,6 +89,8 @@ Pytanie zamykające:
 > Kto jest użytkownikiem Canvas, a kto Model-driven w tym samym Solution?
 
 **Checkpoint:** z Contract widać powiązane Approval i Process Log.
+
+**Talk track (5 min):** Model-driven Administration. Canvas i MDA nie konkurują – różne role, to samo Dataverse.
 
 ---
 
@@ -112,6 +126,8 @@ Omów:
 - dlaczego nie hard-code URL DEV.
 
 Zadanie: każdy rysuje obecny monolit i zaznacza cięcia. Zdjęcia idą do LAB 12.
+
+**Talk track:** Orchestrator, Child Flow, Single Responsibility, Configuration over Hard-code. Saga / circuit breaker tylko gdy ktoś zapyta – appendix, nie blok.
 
 ---
 

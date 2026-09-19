@@ -269,6 +269,10 @@ Dopisz wniosek maksymalnie w trzech zdaniach.
 - potrafi wyjaśnić Top Count vs pagination,
 - potrafi wyjaśnić wpływ concurrency na throttling.
 
+## Po tym LAB
+
+Talk track: Delegation First, Lazy Loading, N+1. Brak błędu wykonania ≠ poprawny wynik.
+
 ---
 
 # Materiał Microsoft

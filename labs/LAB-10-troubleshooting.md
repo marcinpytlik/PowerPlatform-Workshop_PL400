@@ -270,6 +270,10 @@ Uczestnik:
 - wskazuje mechanizm race/retry/trigger loop,
 - proponuje trwałe zabezpieczenie.
 
+## Po tym LAB
+
+Talk track: **Observability** – Business ID + Correlation ID + Flow Run ID + Process Log.
+
 ---
 
 # Materiał Microsoft

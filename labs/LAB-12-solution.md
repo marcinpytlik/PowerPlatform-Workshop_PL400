@@ -301,6 +301,10 @@ Jeśli proces działa wyłącznie dlatego, że wartość jest jeszcze wpisana li
 - wersja = 1.0.0.0,
 - flow działa po refaktoryzacji konfiguracji.
 
+## Po tym LAB
+
+Talk track: Orchestrator, Child Flow, **Configuration over Hard-code**. Solution jest przenośnym artefaktem, nie kopią DEV.
+
 ---
 
 # Materiał Microsoft
