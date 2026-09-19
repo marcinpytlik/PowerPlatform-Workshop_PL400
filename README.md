@@ -6,7 +6,7 @@ Warsztat zaawansowany, nie kurs egzaminacyjny. Nazwa `PL400` w repozytorium jest
 
 **Vendor Contract Management** – aplikacja do obsługi umów z dostawcami, rozwijana od prostego rozwiązania Canvas App + SharePoint do rozwiązania opartego o Dataverse, Model-driven App, Power Automate, API oraz ALM.
 
-Przed dniem 1 wykonaj [`SETUP.md`](SETUP.md). Mock API: [`mock-api/README.md`](mock-api/README.md). Skrypty sali: [`trainer/`](trainer/).
+Przed dniem 1 wykonaj [`SETUP.md`](SETUP.md). Mock API: [`mock-api/README.md`](mock-api/README.md). Skrypty sali: [`trainer/`](trainer/). Materiały teoretyczne i wzorce: [`THEORY.md`](THEORY.md).
 
 ## Cel szkolenia
 
@@ -64,10 +64,10 @@ Model-driven App
 Numery `01`–`13` są zgodne z LAB 01–13. `00-*` to materiał przed pierwszym labem.
 
 - `00-agenda` – agenda 3 dni zgranych z realnym czasem sali.
-- `00-architecture` – wymagania i decyzje architektoniczne.
+- `00-architecture` – wymagania, decyzje architektoniczne i wzorce projektowe.
 - `01-sharepoint` – model początkowy SharePoint (LAB 01).
-- `02-canvas-app` – projekt aplikacji Canvas (LAB 02).
-- `03-power-automate` – flowy i wzorce (LAB 03).
+- `02-canvas-app` – projekt aplikacji Canvas, Power Fx i wzorce projektowe (LAB 02).
+- `03-power-automate` – flowy, wzorce projektowe i antywzorce (LAB 03).
 - `04-api-integration` – kontrakt OpenAPI (LAB 04).
 - `05-dataverse` – docelowy model danych (LAB 05).
 - `06-migration` – SharePoint → Dataverse (LAB 06).
@@ -82,7 +82,18 @@ Numery `01`–`13` są zgodne z LAB 01–13. `00-*` to materiał przed pierwszym
 - `labs` – laboratoria prowadzone krok po kroku.
 - `exercises` – zadania samodzielne.
 - `solutions` – oczekiwane kierunki rozwiązań.
-- `trainer` – skrypty dni, awarie, plan B.
+- `trainer` – skrypty dni, awarie, plan B oraz `THEORY-TALK-TRACK.md`.
+
+## Teoria i wzorce projektowe
+
+Materiały teoretyczne są zebrane w [`THEORY.md`](THEORY.md). Obejmują:
+
+- wzorce architektoniczne Power Platform,
+- wzorce Power Apps / Canvas Apps,
+- wzorce Power Automate,
+- antywzorce,
+- checklisty projektowe,
+- przykłady odnoszące się bezpośrednio do Vendor Contract Management.
 
 ## Konwencja nazewnicza
 
