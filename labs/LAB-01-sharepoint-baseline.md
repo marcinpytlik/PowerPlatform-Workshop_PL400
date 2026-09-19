@@ -119,7 +119,7 @@ Dodaj kolumny:
 | Currency | Choice | Tak | PLN, EUR, USD |
 | ValidFrom | Date | Tak | tylko data |
 | ValidTo | Date | Tak | tylko data |
-| Status | Choice | Tak | Draft, Submitted, InApproval, Approved, Rejected, Integrated |
+| Status | Choice | Tak | Draft, Submitted, In Approval, Approved, Rejected, Integration Pending, Integrated, Integration Error |
 | RequestorEmail | Single line of text | Tak | adres zgłaszającego |
 | ExternalSystemId | Single line of text | Nie | ID zwrócone przez API |
 | CorrelationId | Single line of text | Nie | identyfikator procesu |
@@ -140,10 +140,12 @@ Utwórz Choice z wartościami dokładnie w tej kolejności:
 ```text
 Draft
 Submitted
-InApproval
+In Approval
 Approved
 Rejected
+Integration Pending
 Integrated
+Integration Error
 ```
 
 Default value: `Draft`.
