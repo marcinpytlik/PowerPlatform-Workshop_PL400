@@ -145,7 +145,7 @@ LAB 03, 06, 10 i 13 używają `Start and wait for an approval`.
 Repozytorium zawiera mock API:
 
 - kod: [`mock-api/`](mock-api/README.md),
-- kontrakt: [`11-api-integration/openapi.yaml`](11-api-integration/openapi.yaml).
+- kontrakt: [`04-api-integration/openapi.yaml`](04-api-integration/openapi.yaml).
 
 Tryby:
 

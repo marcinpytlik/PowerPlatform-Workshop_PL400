@@ -85,7 +85,7 @@ Pytanie zamykające:
 Jeżeli grupa skończyła LAB 07 przed 13:50 i nie ma długów z migracji:
 
 - 30–45 min LAB 08, tylko tytuł, Save i walidacja,
-- słownik z `07-multilanguage/translations.csv`.
+- słownik z `08-multilanguage/translations.csv`.
 
 W przeciwnym razie: LAB 08 jako praca własna. Nie zabieraj czasu ALM-owi.
 

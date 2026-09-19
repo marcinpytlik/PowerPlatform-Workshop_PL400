@@ -61,21 +61,24 @@ Model-driven App
 ## Struktura repozytorium
 
 - `SETUP.md` – tenant, licencje, środowiska, DLP, konta, checklisty.
+Numery `01`–`13` są zgodne z LAB 01–13. `00-*` to materiał przed pierwszym labem.
+
 - `00-agenda` – agenda 3 dni zgranych z realnym czasem sali.
-- `01-architecture` – wymagania i decyzje architektoniczne.
-- `02-sharepoint` – model początkowy SharePoint.
-- `03-canvas-app` – projekt aplikacji Canvas.
-- `04-power-automate` – flowy i wzorce.
-- `05-dataverse` – docelowy model danych.
-- `06-model-driven` – aplikacja administracyjna.
-- `07-multilanguage` – słownik UI; LAB 08 jest opcjonalny.
-- `08-error-handling` – wzorce obsługi błędów.
-- `09-monitoring` – troubleshooting i monitoring.
-- `10-performance` – optymalizacja i limity.
-- `11-api-integration` – kontrakt OpenAPI.
+- `00-architecture` – wymagania i decyzje architektoniczne.
+- `01-sharepoint` – model początkowy SharePoint (LAB 01).
+- `02-canvas-app` – projekt aplikacji Canvas (LAB 02).
+- `03-power-automate` – flowy i wzorce (LAB 03).
+- `04-api-integration` – kontrakt OpenAPI (LAB 04).
+- `05-dataverse` – docelowy model danych (LAB 05).
+- `06-migration` – SharePoint → Dataverse (LAB 06).
+- `07-model-driven` – aplikacja administracyjna (LAB 07).
+- `08-multilanguage` – słownik UI; LAB 08 jest opcjonalny.
+- `09-error-handling` – wzorce obsługi błędów (LAB 09).
+- `10-monitoring` – troubleshooting (LAB 10).
+- `11-performance` – optymalizacja i limity (LAB 11).
+- `12-solutions-alm` – Solutions i wersjonowanie (LAB 12).
+- `13-deployment` – DEV/TEST/PROD (LAB 13).
 - `mock-api` – serwer 201 / 409 / 429 / 500 / timeout.
-- `12-solutions-alm` – Solutions i wersjonowanie.
-- `13-deployment` – DEV/TEST/PROD.
 - `labs` – laboratoria prowadzone krok po kroku.
 - `exercises` – zadania samodzielne.
 - `solutions` – oczekiwane kierunki rozwiązań.

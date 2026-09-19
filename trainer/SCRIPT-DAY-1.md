@@ -18,7 +18,7 @@ Jeżeli HTTP albo Approvals padają – od razu [PLAN-B](PLAN-B.md), nie w trakc
 
 ## 09:00–09:25 – Wprowadzenie i architektura
 
-Pokaż proces biznesowy z [REQUIREMENTS](../01-architecture/REQUIREMENTS.md). Jedno zdanie na rolę.
+Pokaż proces biznesowy z [REQUIREMENTS](../00-architecture/REQUIREMENTS.md). Jedno zdanie na rolę.
 
 Narysuj architekturę **początkową**, nie docelową:
 

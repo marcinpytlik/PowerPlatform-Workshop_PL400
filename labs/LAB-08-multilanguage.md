@@ -17,7 +17,7 @@ Dodać wielojęzyczność do Canvas App bez kopiowania ekranów i bez umieszczan
 ## Wymagania
 
 - Canvas App `VCM - Contract Portal` po LAB 06 (źródło Dataverse),
-- plik [`../07-multilanguage/translations.csv`](../07-multilanguage/translations.csv).
+- plik [`../08-multilanguage/translations.csv`](../08-multilanguage/translations.csv).
 
 ---
 
@@ -41,7 +41,7 @@ Translation collection/table
 
 # Zadanie 1 – Sprawdzenie słownika
 
-Otwórz [`../07-multilanguage/translations.csv`](../07-multilanguage/translations.csv).
+Otwórz [`../08-multilanguage/translations.csv`](../08-multilanguage/translations.csv).
 
 Plik ma klucze używane w tym LAB, plus `FR` pod ćwiczenie E08 oraz `MISSING_DE_DEMO` z pustym DE pod fallback.
 
