@@ -65,7 +65,7 @@ Ten status oznacza, że proces biznesowej akceptacji zakończył się poprawnie,
 
 ---
 
-# Zadanie 3 – Przygotowanie requestu
+# Zadanie 2 – Przygotowanie requestu
 
 Dodaj Scope `External Integration` po końcowym Approved.
 
@@ -307,7 +307,7 @@ HTTP failed
 -> Contract nie otrzymuje statusu Integrated
 ```
 
-Na tym etapie log może być zapisany w SharePoint lub Compose. Docelowy `ProcessLog` zbudujemy w LAB 08.
+Na tym etapie log może być zapisany w SharePoint lub Compose. Docelowy `ProcessLog` zbudujemy w LAB 09.
 
 ---
 
