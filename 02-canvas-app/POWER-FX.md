@@ -36,3 +36,10 @@ Trace(
     { ContractNumber: txtContractNumber.Text }
 )
 ```
+
+
+---
+
+## Dalej: wzorce projektowe
+
+Przejdź do [DESIGN-PATTERNS.md](DESIGN-PATTERNS.md), gdzie opisane są m.in. Separation of Concerns, State Management, Delegation First, Navigation Parameters, Lazy Loading i anti-patterns Canvas Apps.
