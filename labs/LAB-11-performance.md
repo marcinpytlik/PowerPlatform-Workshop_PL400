@@ -1,5 +1,17 @@
 # LAB 11 – Performance i limity: SharePoint, Canvas App i Power Automate
 
+## Wariant na sali (30 min)
+
+W agendzie 3-dniowej nie robimy pełnych 90 minut.
+
+Obowiązkowe:
+
+1. zadanie 1 – zły Get items + Apply to each + Condition,
+2. zadanie 2 – Filter Query i porównanie czasu,
+3. zadanie 5 – jedna niedelegowalna formuła: brak błędu ≠ poprawny wynik.
+
+Monitor jest osobnym blokiem 11:30–12:00 (zadanie 7). Zadania 3, 4, 6, 8–10 zostają jako materiał własny albo dzień 4.
+
 ## Cel laboratorium
 
 Porównać rozwiązanie „działa” z rozwiązaniem „skaluje się rozsądnie”. Uczestnicy wykonują pomiar przed i po zmianie.

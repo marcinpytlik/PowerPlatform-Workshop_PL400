@@ -16,11 +16,13 @@ Po laboratorium uczestnik potrafi:
 
 ## Czas
 
-90 minut.
+90 minut. W agendzie 3-dniowej: **75 min** – testy 201, 500 i Terminate po FINALLY. Timeout zostaw, jeśli jest bufor.
 
 ## Wymagania
 
-LAB 04 oraz tabela Process Log z LAB 05.
+- LAB 04 oraz LAB 06,
+- tabela Process Log i Contract w Dataverse,
+- mock API w trybie `success`, potem `error`.
 
 ---
 
@@ -214,7 +216,7 @@ Message         <- error message
 Contract        <- lookup do bieżącej umowy
 ```
 
-Jeżeli nie masz jeszcze Contract w Dataverse, w wariancie przejściowym pozostaw lookup pusty i użyj ContractNumber/CorrelationId. W docelowej wersji po migracji proces pracuje na Dataverse.
+Lookup Contract jest wymagany. Po LAB 06 proces pracuje na Dataverse – nie zapisuj logu „w powietrze”.
 
 ---
 

@@ -17,7 +17,7 @@ Po laboratorium uczestnik potrafi:
 
 ## Czas
 
-90 minut.
+90 minut. W agendzie 3-dniowej: **75 min**. Connection references i environment variables są obowiązkowe. Pełny podział na child flows implementuj tylko gdy jest bufor – rysunek z dnia 2 wystarczy jako kierunek.
 
 ---
 

@@ -19,15 +19,20 @@ Laboratorium obejmuje:
 
 ## Czas
 
-90 minut.
+90 minut. W agendzie 3-dniowej: **75 min** (wariant na sali poniżej).
 
 ## Wymagania
 
 - ukończony LAB 03,
-- endpoint demonstracyjny prowadzącego lub mock API,
+- uruchomione [mock API](../mock-api/README.md) z publicznym HTTPS,
+- `VCM_API_BASE_URL` albo tymczasowy URL rozdany przez prowadzącego,
 - możliwość użycia akcji HTTP w środowisku szkoleniowym.
 
-> Akcja HTTP może wymagać odpowiedniej licencji. 
+> Akcja HTTP może wymagać odpowiedniej licencji. Gdy HTTP albo DLP blokują LAB, użyj [PLAN-B](../trainer/PLAN-B.md).
+
+## Wariant na sali (75 min)
+
+Pełna macierz z zadania 11 ma 90 minut. W agendzie 3-dniowej zrób testy A, C, D/E i F. Test B (400) i timeout zostaw jako demo prowadzącego. 
 
 ---
 
@@ -69,19 +74,31 @@ Ten status oznacza, że proces biznesowej akceptacji zakończył się poprawnie,
 
 Dodaj Scope `External Integration` po końcowym Approved.
 
-Dodaj Compose `Compose - API Request`:
+Dodaj Compose `Compose - API Request`. Kontrakt API używa **`supplierCode`**, nie nazwy wyświetlanej dostawcy.
 
 ```json
 {
-  "contractNumber": "@{triggerBody()?['Title']}",
-  "supplier": "<supplier name>",
+  "contractNumber": "<ContractNumber / Title>",
+  "supplierCode": "<SupplierCode z Get Supplier>",
   "amount": "<amount>",
   "currency": "<currency>",
   "correlationId": "<correlation id>"
 }
 ```
 
-W designerze nie wklejaj literalnie placeholderów `<...>` – wybierz dynamic content z flow.
+W designerze nie wklejaj literalnie placeholderów `<...>` – wybierz dynamic content z flow. `supplierCode` weź z listy/tabeli dostawcy, nie z Lookup display name.
+
+Przykład zgodny z [`../11-api-integration/openapi.yaml`](../11-api-integration/openapi.yaml):
+
+```json
+{
+  "contractNumber": "VCM/2026/001",
+  "supplierCode": "SUP-001",
+  "amount": 50000,
+  "currency": "PLN",
+  "correlationId": "7c2e9b1a-demo"
+}
+```
 
 ## Cel
 
@@ -97,8 +114,10 @@ Ustaw:
 
 ```text
 Method: POST
-URI: <endpoint prowadzącego>/api/contracts
+URI: <VCM_API_BASE_URL>/api/contracts
 ```
+
+Na tym etapie URL może być jeszcze wpisany ręcznie. W LAB 12 zastąpimy go Environment Variable. Nie używaj `localhost` – Power Automate nie zobaczy laptopa uczestnika.
 
 Headers:
 
@@ -178,7 +197,13 @@ Wartości wybierz z dynamic content/expressions.
 
 # Zadanie 5 – Sukces 201
 
-Uruchom endpoint w trybie zwracającym 201.
+Uruchom mock API w trybie `success` albo użyj numeru umowy bez `409` / `429` / `500` w nazwie.
+
+```bash
+curl -s -X PUT "$API/admin/mode" \
+  -H 'Content-Type: application/json' \
+  -d '{"mode":"success"}'
+```
 
 Przykładowa odpowiedź:
 
@@ -225,7 +250,7 @@ is successful
 
 # Zadanie 7 – Obsługa 409 Conflict
 
-Skonfiguruj mock API tak, aby dla konkretnego ContractNumber zwracało:
+Użyj numeru `VCM/LAB04/409`, nagłówka `x-mock-mode: 409` albo trybu globalnego `conflict`. Mock zwróci:
 
 ```text
 409 Conflict
@@ -261,7 +286,7 @@ Omów pojęcie idempotencji.
 
 # Zadanie 8 – 429 Too Many Requests
 
-Ustaw endpoint w trybie 429.
+Ustaw tryb `throttle`, nagłówek `x-mock-mode: 429` albo numer `VCM/LAB04/429`.
 
 Przykładowo:
 
@@ -296,7 +321,7 @@ Pytania:
 
 # Zadanie 9 – 500 Internal Server Error
 
-Ustaw API w trybie 500.
+Ustaw tryb `error`, nagłówek `x-mock-mode: 500` albo numer `VCM/LAB04/500`.
 
 Oczekiwane:
 

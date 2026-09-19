@@ -18,7 +18,7 @@ Ukończone LAB 05 i LAB 06.
 
 # Zadanie 1 – Utworzenie aplikacji
 
-1. Otwórz Solution `Vendor Contract Management DEV`.
+1. Otwórz Solution `Vendor Contract Management`.
 2. **New -> App -> Model-driven app**.
 3. Nazwa:
 

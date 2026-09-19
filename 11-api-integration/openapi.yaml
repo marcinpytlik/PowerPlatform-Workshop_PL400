@@ -1,11 +1,37 @@
 openapi: 3.0.3
 info:
   title: Vendor Contract Mock API
-  version: 1.0.0
+  version: 1.1.0
+  description: >
+    Kontrakt używany w LAB 04, 09, 11 i 13. Implementacja: mock-api/server.py.
+    Kluczem biznesowym dostawcy jest supplierCode, nie nazwa wyświetlana.
+servers:
+  - url: http://localhost:8080
 paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        '200':
+          description: Service is up
   /api/contracts:
     post:
       summary: Register approved contract
+      parameters:
+        - in: header
+          name: x-correlation-id
+          schema:
+            type: string
+        - in: header
+          name: x-mock-mode
+          schema:
+            type: string
+            enum: [success, conflict, throttle, error, timeout, '201', '409', '429', '500']
+        - in: query
+          name: mode
+          schema:
+            type: string
+            enum: [success, conflict, throttle, error, timeout, '201', '409', '429', '500']
       requestBody:
         required: true
         content:
@@ -24,14 +50,61 @@ paths:
                   type: string
                 correlationId:
                   type: string
+            example:
+              contractNumber: VCM/2026/001
+              supplierCode: SUP-001
+              amount: 50000
+              currency: PLN
+              correlationId: 7c2e9b1a-demo
       responses:
         '201':
           description: Contract registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: ERP-10001
+                  status:
+                    type: string
+                    example: created
+                  contractNumber:
+                    type: string
+                  supplierCode:
+                    type: string
+                  amount:
+                    type: number
+                  currency:
+                    type: string
+                  correlationId:
+                    type: string
         '400':
           description: Invalid request
         '409':
           description: Contract already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: CONTRACT_ALREADY_EXISTS
+                  message:
+                    type: string
+                  externalId:
+                    type: string
+                    example: ERP-9999
+                  correlationId:
+                    type: string
         '429':
           description: Too many requests
+          headers:
+            Retry-After:
+              schema:
+                type: string
+                example: '10'
         '500':
           description: Server error

@@ -1,9 +1,14 @@
-Key,PL,EN,DE
-SAVE,Zapisz,Save,Speichern
-CANCEL,Anuluj,Cancel,Abbrechen
-CONTRACT,Umowa,Contract,Vertrag
-SUPPLIER,Dostawca,Supplier,Lieferant
-AMOUNT,Kwota,Amount,Betrag
-STATUS,Status,Status,Status
-APPROVED,Zatwierdzona,Approved,Genehmigt
-REJECTED,Odrzucona,Rejected,Abgelehnt
+Key,PL,EN,DE,FR
+APP_TITLE,Zarządzanie umowami,Contract Management,Vertragsverwaltung,Gestion des contrats
+SAVE,Zapisz,Save,Speichern,Enregistrer
+CANCEL,Anuluj,Cancel,Abbrechen,Annuler
+NEW_CONTRACT,Nowa umowa,New contract,Neuer Vertrag,Nouveau contrat
+SEARCH,Szukaj,Search,Suchen,Rechercher
+VALIDATION_REQUIRED,Uzupełnij wymagane pola,Fill in the required fields,Pflichtfelder ausfüllen,Renseignez les champs obligatoires
+CONTRACT,Umowa,Contract,Vertrag,Contrat
+SUPPLIER,Dostawca,Supplier,Lieferant,Fournisseur
+AMOUNT,Kwota,Amount,Betrag,Montant
+STATUS,Status,Status,Status,Statut
+APPROVED,Zatwierdzona,Approved,Genehmigt,Approuvé
+REJECTED,Odrzucona,Rejected,Abgelehnt,Rejeté
+MISSING_DE_DEMO,Brakuje tłumaczenia DE,Missing DE translation,,Missing DE translation
