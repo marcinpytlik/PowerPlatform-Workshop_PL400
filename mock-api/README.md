@@ -125,4 +125,4 @@ curl -s -X DELETE "$API/api/contracts"
 python3 mock-api/test_server.py
 ```
 
-Pełny kontrakt: [`../11-api-integration/openapi.yaml`](../11-api-integration/openapi.yaml).
+Pełny kontrakt: [`../04-api-integration/openapi.yaml`](../04-api-integration/openapi.yaml).

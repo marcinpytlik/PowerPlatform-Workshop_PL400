@@ -88,7 +88,7 @@ Dodaj Compose `Compose - API Request`. Kontrakt API używa **`supplierCode`**, n
 
 W designerze nie wklejaj literalnie placeholderów `<...>` – wybierz dynamic content z flow. `supplierCode` weź z listy/tabeli dostawcy, nie z Lookup display name.
 
-Przykład zgodny z [`../11-api-integration/openapi.yaml`](../11-api-integration/openapi.yaml):
+Przykład zgodny z [`../04-api-integration/openapi.yaml`](../04-api-integration/openapi.yaml):
 
 ```json
 {
