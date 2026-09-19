@@ -77,12 +77,15 @@
 - podstawy security roles,
 - model Supplier–Contract–Approval–ProcessLog.
 
-## 10:45–12:00 – Przeniesienie aplikacji do Dataverse
+## 10:45–12:00 – Migracja rozwiązania SharePoint -> Dataverse
 
-- zmiana źródła danych,
+- migracja danych testowych,
+- zmiana źródła danych Canvas App,
 - refaktoryzacja Power Fx,
+- zamiana triggera SharePoint na Dataverse,
+- Update item -> Update a row,
 - relacje zamiast ręcznego łączenia danych,
-- porównanie SharePoint vs Dataverse.
+- test regresyjny SharePoint vs Dataverse.
 
 ## 12:30–13:30 – Model-driven App
 
@@ -103,11 +106,11 @@
 
 ## 14:30–15:30 – Refaktoryzacja Power Automate
 
-- orchestrator,
-- child flows,
+- docelowy orchestrator,
+- child flows / solution-aware flows,
 - małe flowy o pojedynczej odpowiedzialności,
-- connection references,
-- environment variables,
+- przygotowanie do connection references,
+- przygotowanie do environment variables,
 - konfiguracja zamiast hard-code.
 
 ## 15:30–16:00 – Architektura: flow czy kod?
