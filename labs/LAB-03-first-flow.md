@@ -37,7 +37,7 @@ czy Status = Submitted?
 Generate CorrelationId
         |
         v
-Update Status = InApproval
+Update Status = In Approval
         |
         v
 Finance required?
@@ -127,7 +127,7 @@ Dodaj `Update item` dla Contracts:
 
 - ID: ID z triggera,
 - CorrelationId: output Compose,
-- Status: `InApproval`,
+- Status: `In Approval`,
 - pozostałe wymagane pola zmapuj z triggera.
 
 > to Update ponownie spełni trigger „created or modified”. Drugi run powinien zakończyć się, ponieważ Status nie jest już `Submitted`. W LAB 09 wykorzystamy tę sytuację do diagnostyki.
@@ -267,13 +267,15 @@ Po wszystkich wymaganych Approval:
 Status = Approved
 ```
 
-2. Wyślij email do RequestorEmail:
+2. W LAB 04, przed rozpoczęciem wywołania zewnętrznego API, ustawimy dodatkowo `Integration Pending`. Dzięki temu stan biznesowej akceptacji i stan integracji są rozróżnione.
+
+3. Wyślij email do RequestorEmail:
 
 ```text
 Subject: Contract <ContractNumber> approved
 ```
 
-3. Treść zawiera:
+4. Treść zawiera:
    - dostawcę,
    - kwotę,
    - CorrelationId.
