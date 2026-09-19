@@ -41,3 +41,10 @@ Odpowiedzialność:
 - normalizacja informacji o błędzie,
 - zapis Process Log,
 - powiadomienie techniczne.
+
+
+---
+
+## Dalej: wzorce projektowe
+
+Przejdź do [DESIGN-PATTERNS.md](DESIGN-PATTERNS.md), gdzie opisane są m.in. Orchestrator, Child Flow, Trigger Guard, Idempotency, retry classification, Saga-like process, compensating actions i observability.
