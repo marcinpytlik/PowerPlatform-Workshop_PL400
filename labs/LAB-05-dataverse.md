@@ -17,7 +17,7 @@ Po laboratorium uczestnik potrafi:
 
 ## Czas
 
-100–120 minut.
+100–120 minut. W agendzie 3-dniowej: **105 min**. Relacje N:N są tematem dyskusji, nie częścią modelu VCM.
 
 ## Wymagania
 

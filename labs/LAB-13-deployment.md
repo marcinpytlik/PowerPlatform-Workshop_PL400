@@ -1,5 +1,18 @@
 # LAB 13 – Deployment DEV -> TEST: managed solution i smoke test
 
+## Wariant na sali (60 min)
+
+W agendzie 3-dniowej nie każdy robi pełne E2E.
+
+| Kto | Zadania |
+|---|---|
+| Wszyscy | 1–9: freeze, kontrola, export managed, import, connections, env vars, włączenie flowów |
+| Wszyscy | 10–11: smoke Model-driven + Canvas |
+| Prowadzący na rzutniku | 12–13: E2E 150 000 i negative test 500 |
+| Jeśli jest czas | 14–15: managed layers i Pipelines |
+
+Uczestnik kończy LAB, gdy managed `1.0.0.0` jest w TEST, `VCM_API_BASE_URL` nie wskazuje hard-code DEV i smoke przechodzi.
+
 ## Cel laboratorium
 
 Przeprowadzić kontrolowany deployment rozwiązania Vendor Contract Management z DEV do TEST i wykonać test po wdrożeniu.

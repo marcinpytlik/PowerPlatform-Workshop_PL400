@@ -6,7 +6,7 @@ Przeprowadzić pełną analizę incydentu bez zmieniania flow przed ustaleniem p
 
 ## Czas
 
-75–90 minut.
+75–90 minut. W agendzie 3-dniowej: **60 min**, jeden wariant przygotowany przez prowadzącego. Nie odtwarzaj A–E na raz. Procedury: [`../trainer/DEMO-FAILURES.md`](../trainer/DEMO-FAILURES.md).
 
 ## Scenariusz
 

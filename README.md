@@ -1,8 +1,12 @@
 # Power Platform Advanced Workshop
 
+Warsztat zaawansowany, nie kurs egzaminacyjny. Nazwa `PL400` w repozytorium jest robocza.
+
 ## Projekt szkoleniowy
 
 **Vendor Contract Management** – aplikacja do obsługi umów z dostawcami, rozwijana od prostego rozwiązania Canvas App + SharePoint do rozwiązania opartego o Dataverse, Model-driven App, Power Automate, API oraz ALM.
+
+Przed dniem 1 wykonaj [`SETUP.md`](SETUP.md). Mock API: [`mock-api/README.md`](mock-api/README.md). Skrypty sali: [`trainer/`](trainer/).
 
 ## Cel szkolenia
 
@@ -56,24 +60,26 @@ Model-driven App
 
 ## Struktura repozytorium
 
-- `00-agenda` – agenda szkolenia.
+- `SETUP.md` – tenant, licencje, środowiska, DLP, konta, checklisty.
+- `00-agenda` – agenda 3 dni zgranych z realnym czasem sali.
 - `01-architecture` – wymagania i decyzje architektoniczne.
 - `02-sharepoint` – model początkowy SharePoint.
 - `03-canvas-app` – projekt aplikacji Canvas.
 - `04-power-automate` – flowy i wzorce.
 - `05-dataverse` – docelowy model danych.
 - `06-model-driven` – aplikacja administracyjna.
-- `07-multilanguage` – wielojęzyczność.
+- `07-multilanguage` – słownik UI; LAB 08 jest opcjonalny.
 - `08-error-handling` – wzorce obsługi błędów.
 - `09-monitoring` – troubleshooting i monitoring.
 - `10-performance` – optymalizacja i limity.
-- `11-api-integration` – integracja HTTP/API.
+- `11-api-integration` – kontrakt OpenAPI.
+- `mock-api` – serwer 201 / 409 / 429 / 500 / timeout.
 - `12-solutions-alm` – Solutions i wersjonowanie.
 - `13-deployment` – DEV/TEST/PROD.
 - `labs` – laboratoria prowadzone krok po kroku.
 - `exercises` – zadania samodzielne.
-- `solutions` – oczekiwane rozwiązania i checklisty.
-- `trainer` – notatki prowadzącego.
+- `solutions` – oczekiwane kierunki rozwiązań.
+- `trainer` – skrypty dni, awarie, plan B.
 
 ## Konwencja nazewnicza
 
@@ -107,3 +113,5 @@ MAJOR.MINOR.BUILD.REVISION
 ## Rozbudowane laboratoria
 
 Komplet instrukcji krok po kroku znajduje się w [`labs/README.md`](labs/README.md). Laboratoria LAB 01–13 prowadzą od modelu SharePoint, przez Canvas App i Power Automate na SharePoint, świadomą migrację do Dataverse, aż do managed Solution oraz deploymentu DEV -> TEST.
+
+W agendzie 3-dniowej LAB 08 jest opcjonalny, a LAB 11 i LAB 13 idą w wariancie skróconym opisanym na początku tych plików.

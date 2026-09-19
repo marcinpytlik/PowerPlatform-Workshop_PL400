@@ -1,5 +1,11 @@
 # LAB 08 – Wielojęzyczny Canvas App: PL / EN / DE
 
+## Status w agendzie 3-dniowej
+
+LAB jest **opcjonalny**. Robimy go w dniu 2 tylko wtedy, gdy LAB 07 skończył się przed 13:50 i migracja nie ma długów. W przeciwnym razie – praca własna albo dzień 4.
+
+W wariancie skróconym (30–45 min) zrób zadania 1–6 dla tytułu, Save i walidacji. Zadanie 7 (fallback) i challenge zostaw na później.
+
 ## Cel laboratorium
 
 Dodać wielojęzyczność do Canvas App bez kopiowania ekranów i bez umieszczania warunków `If(Language()=...)` w każdej kontrolce.
@@ -35,19 +41,9 @@ Translation collection/table
 
 # Zadanie 1 – Sprawdzenie słownika
 
-Otwórz `translations.csv` i sprawdź strukturę.
+Otwórz [`../07-multilanguage/translations.csv`](../07-multilanguage/translations.csv).
 
-Docelowo słownik powinien zawierać klucz i tłumaczenia, np.:
-
-```text
-Key,PL,EN,DE
-APP_TITLE,Zarządzanie umowami,Contract Management,Vertragsverwaltung
-SAVE,Zapisz,Save,Speichern
-CANCEL,Anuluj,Cancel,Abbrechen
-NEW_CONTRACT,Nowa umowa,New contract,Neuer Vertrag
-```
-
-Dodaj brakujące klucze wymagane przez Twój Canvas App.
+Plik ma klucze używane w tym LAB, plus `FR` pod ćwiczenie E08 oraz `MISSING_DE_DEMO` z pustym DE pod fallback.
 
 ---
 
@@ -85,7 +81,9 @@ ClearCollect(
     {Key:"SAVE", pl:"Zapisz", en:"Save", de:"Speichern"},
     {Key:"CANCEL", pl:"Anuluj", en:"Cancel", de:"Abbrechen"},
     {Key:"NEW_CONTRACT", pl:"Nowa umowa", en:"New contract", de:"Neuer Vertrag"},
-    {Key:"SEARCH", pl:"Szukaj", en:"Search", de:"Suchen"}
+    {Key:"SEARCH", pl:"Szukaj", en:"Search", de:"Suchen"},
+    {Key:"VALIDATION_REQUIRED", pl:"Uzupełnij wymagane pola", en:"Fill in the required fields", de:"Pflichtfelder ausfüllen"},
+    {Key:"MISSING_DE_DEMO", pl:"Brakuje tłumaczenia DE", en:"Missing DE translation", de:Blank()}
 )
 ```
 
