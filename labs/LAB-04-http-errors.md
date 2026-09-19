@@ -53,7 +53,19 @@ HTTP POST /api/contracts
 
 ---
 
-# Zadanie 1 – Przygotowanie requestu
+# Zadanie 1 – Ustawienie stanu integracji
+
+Przed zbudowaniem requestu zaktualizuj umowę:
+
+```text
+Status = Integration Pending
+```
+
+Ten status oznacza, że proces biznesowej akceptacji zakończył się poprawnie, ale synchronizacja z systemem zewnętrznym jeszcze trwa. Dopiero odpowiedź 201 kończy proces statusem `Integrated`, a błąd techniczny prowadzi później do `Integration Error`.
+
+---
+
+# Zadanie 3 – Przygotowanie requestu
 
 Dodaj Scope `External Integration` po końcowym Approved.
 
@@ -77,7 +89,7 @@ Request ma być widoczny jako osobny krok przed HTTP. Ułatwia to diagnostykę i
 
 ---
 
-# Zadanie 2 – Akcja HTTP
+# Zadanie 3 – Akcja HTTP
 
 Dodaj akcję `HTTP`.
 
@@ -105,7 +117,7 @@ HTTP - Create Contract
 
 ---
 
-# Zadanie 3 – Settings akcji
+# Zadanie 4 – Settings akcji
 
 Zaznacz `HTTP - Create Contract`, następnie otwórz kartę **Settings / Ustawienia**.
 
@@ -164,7 +176,7 @@ Wartości wybierz z dynamic content/expressions.
 
 ---
 
-# Zadanie 4 – Sukces 201
+# Zadanie 5 – Sukces 201
 
 Uruchom endpoint w trybie zwracającym 201.
 
@@ -197,7 +209,7 @@ Sprawdź:
 
 ---
 
-# Zadanie 5 – Run after dla sukcesu
+# Zadanie 6 – Run after dla sukcesu
 
 Dla `Update Contract - Integrated` ustaw Run after tak, aby wykonał się tylko, gdy HTTP zakończy się sukcesem.
 
@@ -211,7 +223,7 @@ is successful
 
 ---
 
-# Zadanie 6 – Obsługa 409 Conflict
+# Zadanie 7 – Obsługa 409 Conflict
 
 Skonfiguruj mock API tak, aby dla konkretnego ContractNumber zwracało:
 
@@ -247,7 +259,7 @@ Omów pojęcie idempotencji.
 
 ---
 
-# Zadanie 7 – 429 Too Many Requests
+# Zadanie 8 – 429 Too Many Requests
 
 Ustaw endpoint w trybie 429.
 
@@ -282,7 +294,7 @@ Pytania:
 
 ---
 
-# Zadanie 8 – 500 Internal Server Error
+# Zadanie 9 – 500 Internal Server Error
 
 Ustaw API w trybie 500.
 
@@ -299,7 +311,7 @@ Na tym etapie log może być zapisany w SharePoint lub Compose. Docelowy `Proces
 
 ---
 
-# Zadanie 9 – Expression do informacji o błędzie
+# Zadanie 10 – Expression do informacji o błędzie
 
 W gałęzi błędu dodaj Compose:
 
@@ -323,7 +335,7 @@ body('HTTP_-_Create_Contract')
 
 ---
 
-# Zadanie 10 – Test matrix
+# Zadanie 11 – Test matrix
 
 Wykonaj i udokumentuj:
 
