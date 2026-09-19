@@ -351,6 +351,10 @@ Uzupełnij tabelę podczas zajęć:
 - auditing jest włączony przynajmniej dla Contract,
 - istnieje rola `VCM Contract User`.
 
+## Po tym LAB
+
+Talk track: **Source of Truth**, State Machine. Pełna ścieżka statusów VCM, łącznie z Integration Pending / Integration Error.
+
 ---
 
 # Materiał Microsoft

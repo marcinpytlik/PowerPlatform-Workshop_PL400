@@ -356,6 +356,10 @@ Po wykonaniu testów:
 - Approval history znajduje się w ContractApprovals,
 - uczestnik potrafi znaleźć konkretny run.
 
+## Po tym LAB
+
+Talk track: **Trigger Guard**, Single Responsibility, correlation ID. Drugi run po `Update` zostaw na LAB 10 – dziś tylko go zauważ.
+
 ---
 
 # Challenge

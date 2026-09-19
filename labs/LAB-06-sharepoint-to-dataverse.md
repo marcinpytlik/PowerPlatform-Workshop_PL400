@@ -365,6 +365,10 @@ Nie musisz jeszcze rozdzielać wszystkich flowów. Zrobimy to przed finalnym pak
 - stare flow SharePoint jest wyłączone,
 - test regresyjny przechodzi.
 
+## Po tym LAB
+
+To był **Strangler Migration Pattern**: nowy model obok starego, przepięcie po komponencie, regresja, dopiero wyłączenie SharePoint flow.
+
 ---
 
 # Materiał Microsoft

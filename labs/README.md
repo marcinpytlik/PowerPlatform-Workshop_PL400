@@ -37,3 +37,5 @@ Każdy LAB zawiera:
 Interfejs Power Apps i Power Automate jest rozwijany niezależnie od materiałów szkoleniowych. Nazwy elementów UI w LAB-ach są podawane tak, aby uczestnik mógł odnaleźć odpowiednik w polskiej lub angielskiej wersji interfejsu. W przypadku różnic w designerze należy zachować cel techniczny kroku, a nie przywiązywać się do położenia konkretnego przycisku.
 
 Setup przed dniem 1: [`../SETUP.md`](../SETUP.md). Mock API: [`../mock-api/README.md`](../mock-api/README.md). Solution ma jedną nazwę: `Vendor Contract Management` – DEV jest środowiskiem, nie członem nazwy.
+
+Po każdym LAB jest sekcja **Po tym LAB** z nazwą wzorca. Na sali trzymaj się [`../trainer/THEORY-TALK-TRACK.md`](../trainer/THEORY-TALK-TRACK.md), nie całego [`../THEORY.md`](../THEORY.md).

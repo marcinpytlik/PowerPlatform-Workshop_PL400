@@ -19,6 +19,7 @@ Skrypty dni:
 Awarie: [DEMO-FAILURES.md](DEMO-FAILURES.md).
 Obejścia: [PLAN-B.md](PLAN-B.md).
 Setup: [../SETUP.md](../SETUP.md).
+Teoria na sali: [THEORY-TALK-TRACK.md](THEORY-TALK-TRACK.md). Pełne wzorce: [../THEORY.md](../THEORY.md) – appendix, nie skrypt wykładu.
 
 ## Moment 1 – SharePoint
 

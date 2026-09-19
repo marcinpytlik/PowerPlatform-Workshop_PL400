@@ -220,6 +220,10 @@ Jeżeli Choice przechowuje etykiety lokalizowane przez Dataverse, wykorzystaj mo
 - istnieje fallback,
 - język można przełączyć bez restartu aplikacji.
 
+## Po tym LAB
+
+Słownik kluczy to **Configuration over Hard-code** w UI. E08 (FR) nie powinien dopisywać `If(Language()=...)` w kontrolkach.
+
 ---
 
 # Challenge

@@ -384,6 +384,10 @@ Wykonaj i udokumentuj:
 - correlation ID jest wysyłane do API,
 - przy 201 zapisywany jest ExternalSystemId.
 
+## Po tym LAB
+
+Talk track: retry classification, Failure Isolation. 409 i 500 nie mają tego samego retry.
+
 ---
 
 # Najczęstsze błędy

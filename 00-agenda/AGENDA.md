@@ -11,6 +11,8 @@ To nie jest kurs egzaminacyjny. Nazwa PL-400 w repozytorium jest robocza.
 
 Czas poniżej jest zgrany z realnym tempem sali. LAB 08 jest opcjonalny. LAB 11 i LAB 13 idą w wariancie skróconym. Pełne wersje tych labów zostają w repozytorium jako materiał własny albo dzień 4.
 
+Teoria na sali: tylko momenty z [`trainer/THEORY-TALK-TRACK.md`](../trainer/THEORY-TALK-TRACK.md). Nie wykładaj całego [`THEORY.md`](../THEORY.md). Wzorzec nazywasz **po** problemie z labu.
+
 # Dzień 1 – od pomysłu do działającej aplikacji
 
 ## 09:00–09:25 – Wprowadzenie i architektura rozwiązania
@@ -36,6 +38,7 @@ Czas poniżej jest zgrany z realnym tempem sali. LAB 08 jest opcjonalny. LAB 11 
 - filtrowanie i wyszukiwanie,
 - podstawy delegacji – zapisujemy ostrzeżenie, nie omijamy go kolekcją,
 - `Notify()` i `Trace()`.
+- talk track (5–10 min, z czasu labu): Separation of Concerns, Delegation First.
 
 ## 12:50–14:20 – Pierwszy workflow Power Automate (LAB 03)
 
@@ -46,6 +49,7 @@ Czas poniżej jest zgrany z realnym tempem sali. LAB 08 jest opcjonalny. LAB 11 
 - aktualizacja statusu,
 - powiadomienie,
 - pierwszy podgląd drugiego runu po `Update`.
+- talk track (ok. 10 min): Trigger Guard, correlation ID. Pytanie: co zrobi drugi run po `Update`?
 
 ## 14:35–15:50 – HTTP, Settings, Run after (LAB 04)
 
@@ -57,6 +61,8 @@ Czas poniżej jest zgrany z realnym tempem sali. LAB 08 jest opcjonalny. LAB 11 
 
 Pełna macierz testów B/timeout jest demo prowadzącego, jeśli czas się kończy.
 
+Talk track (ok. 10 min, z czasu labu): retry classification. Pytanie: czy 409 i 500 mają to samo retry?
+
 ## 15:50–16:00 – Retrospekcja architektoniczna
 
 - co już działa,
@@ -67,6 +73,8 @@ Pełna macierz testów B/timeout jest demo prowadzącego, jeśli czas się końc
 # Dzień 2 – Dataverse, Model-driven i utrzymywalna architektura
 
 ## 09:00–10:45 – Dataverse od podstaw (LAB 05)
+
+Pierwsze 10 min: talk track – Source of Truth, State Machine (pełna ścieżka VCM, łącznie z Integration Pending / Integration Error). Potem lab.
 
 - Publisher i jedno Solution `Vendor Contract Management`,
 - tables i columns,
@@ -90,12 +98,14 @@ Relacje N:N są tematem dyskusji, nie częścią modelu VCM.
 - relacje zamiast ręcznego łączenia danych,
 - test regresyjny SharePoint vs Dataverse,
 - wyłączenie starego flow.
+- w trakcie: **Strangler Migration** – nowy model obok, przepięcie po komponencie, potem Off na starym flow.
 
 ## 13:00–14:00 – Model-driven App (LAB 07)
 
 - czym różni się od Canvas App,
 - forms, views, navigation, related records,
 - aplikacja administracyjna Contract Administration.
+- talk track (5 min): Model-driven Administration – Canvas i MDA nie konkurują.
 
 ## 14:00–14:15 – Bufor albo LAB 08
 
@@ -111,7 +121,7 @@ Wielojęzyczność Canvas App jest **opcjonalna**. Robimy ją tylko wtedy, gdy L
 - przygotowanie do connection references i environment variables,
 - konfiguracja zamiast hard-code.
 
-Implementacja podziału jest w LAB 12. Tu rysujemy cięcia.
+Implementacja podziału jest w LAB 12. Tu rysujemy cięcia. Talk track: Orchestrator, Child Flow, Configuration over Hard-code.
 
 ## 15:15–15:30 – Przerwa
 
@@ -133,6 +143,7 @@ Implementacja podziału jest w LAB 12. Tu rysujemy cięcia.
 - `Terminate` dopiero po FINALLY,
 - retry policy i timeout,
 - logowanie błędów do Process Log.
+- talk track: TRY/CATCH/FINALLY, błąd biznesowy vs techniczny.
 
 ## 10:15–11:15 – Diagnostyka incydentu (LAB 10)
 
@@ -141,6 +152,7 @@ Implementacja podziału jest w LAB 12. Tu rysujemy cięcia.
 - trigger loop, retry, race, stale write,
 - correlation ID,
 - raport incydentu przed poprawką.
+- talk track (5 min): Observability – Business ID + Correlation ID + Run ID + Process Log.
 
 ## 11:30–12:00 – Power Apps Monitor
 
@@ -154,6 +166,7 @@ Implementacja podziału jest w LAB 12. Tu rysujemy cięcia.
 - Get items bez filtra vs Filter Query,
 - delegacja: brak błędu ≠ poprawny wynik,
 - 429 i concurrency – omówienie, nie pełny pomiar na 5000 rekordach.
+- talk track: Delegation First, N+1, przetwarzanie po stronie źródła.
 
 ## 13:00–14:15 – Solutions i ALM (LAB 12)
 
@@ -163,6 +176,7 @@ Implementacja podziału jest w LAB 12. Tu rysujemy cięcia.
 - environment variables,
 - usunięcie hard-code,
 - dependencies i Solution Checker jeśli dostępny.
+- talk track: Configuration over Hard-code, Solution jako przenośny artefakt.
 
 ## 14:15–15:15 – DEV → TEST – wariant skrócony (LAB 13)
 
@@ -190,3 +204,4 @@ Jeżeli jest dodatkowy dzień, wracamy do pełnych wersji:
 - LAB 11 z większym datasetem, indeksami i concurrency,
 - LAB 13 E2E i negative test u każdego, Pipelines,
 - implementacja child flows z LAB 12.
+- appendix z THEORY.md: saga, circuit breaker, anti-corruption – tylko na pytanie.

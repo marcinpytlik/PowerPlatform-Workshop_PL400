@@ -172,6 +172,8 @@ galContracts.Selected
 Navigate(scrContractDetails, ScreenTransition.Fade)
 ```
 
+Szczegóły biorą `galContracts.Selected`. To jest celowo prostsze niż Navigation Parameter z [DESIGN-PATTERNS](../02-canvas-app/DESIGN-PATTERNS.md). Nie przepisuj labu w dniu 1.
+
 ---
 
 # Zadanie 6 – Formularz nowej umowy
@@ -297,6 +299,10 @@ Zapisz obserwację w notatkach uczestnika.
 - walidacja pokazuje `Notify`,
 - umowy wygasające są oznaczone,
 - uczestnik potrafi wskazać miejsce sprawdzania delegacji.
+
+## Po tym LAB
+
+Talk track: Separation of Concerns, Screen as a Feature, Delegation First. Szczegóły: [THEORY-TALK-TRACK](../trainer/THEORY-TALK-TRACK.md).
 
 ---
 

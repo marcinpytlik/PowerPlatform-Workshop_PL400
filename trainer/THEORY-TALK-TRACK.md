@@ -1,5 +1,7 @@
 # Theory Talk Track – ściąga prowadzącego
 
+Używaj tego pliku z [AGENDA](../00-agenda/AGENDA.md) i skryptów dnia. Pełne opisy wzorców są w [THEORY.md](../THEORY.md). Saga, circuit breaker, anti-corruption i compensating action są appendixem – tylko na pytanie albo dzień 4.
+
 ## Dzień 1
 
 ### Po LAB 02 – Canvas App
@@ -93,10 +95,10 @@ A    B     C
 
 ## 3. State Machine
 ~~~text
-Draft -> Submitted -> In Approval -> Approved
-                              |
-                              v
-                           Rejected
+Draft -> Submitted -> In Approval -> Approved -> Integration Pending
+                              |                         |
+                              v                         +--> Integrated
+                           Rejected                     +--> Integration Error
 ~~~
 
 ## 4. Retry classification

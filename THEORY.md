@@ -34,6 +34,8 @@ Tematy: Orchestrator, Child Flows, Single Responsibility, Trigger Guard, Idempot
 
 # Jak używać tych materiałów na szkoleniu
 
+Na sali obowiązuje [`trainer/THEORY-TALK-TRACK.md`](trainer/THEORY-TALK-TRACK.md) oraz momenty wpisane w [`00-agenda/AGENDA.md`](00-agenda/AGENDA.md) i `trainer/SCRIPT-DAY-*.md`. Ten plik jest indeksem i appendixem – nie skryptem wykładu.
+
 Nie wykładaj wszystkich wzorców naraz. Najlepszy moment to sytuacja, gdy uczestnicy **najpierw zobaczą problem**, a potem nazwiesz rozwiązanie.
 
 ~~~text

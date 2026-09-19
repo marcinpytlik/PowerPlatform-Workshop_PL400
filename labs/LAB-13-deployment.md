@@ -369,6 +369,10 @@ LAB jest ukończony, gdy:
 - negative test tworzy Process Log,
 - deployment record został wypełniony.
 
+## Po tym LAB
+
+To samo Solution, inna konfiguracja środowiska. Talk track: Configuration over Hard-code.
+
 ---
 
 # Materiał Microsoft

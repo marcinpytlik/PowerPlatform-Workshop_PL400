@@ -4,6 +4,7 @@
 
 **Laby:** 01, 02, 03, 04.
 **Nie ruszamy:** Dataverse, Solution, wielojęzyczność.
+**Teoria:** tylko [THEORY-TALK-TRACK](THEORY-TALK-TRACK.md) dzień 1. Nie otwieraj pełnego `THEORY.md` na rzutniku.
 
 ## Przygotowanie (08:30–09:00)
 
@@ -67,6 +68,8 @@ Challenge `My contracts` tylko jeśli ktoś skończy 15 minut wcześniej.
 
 **Checkpoint:** trzy ekrany, nowa umowa ląduje na liście SharePoint.
 
+**Talk track (5–10 min, z końca labu):** Separation of Concerns, Screen as a Feature, Delegation First. Pytanie: co się stanie, jeśli cały proces wsadzisz w `OnSelect`? Lab celowo używa `galContracts.Selected` – Navigation Parameter zostaw jako „następny krok”, nie poprawiaj labu.
+
 ---
 
 ## 12:20–12:50 – Lunch
@@ -91,6 +94,8 @@ Jeżeli Approvals nie dochodzą do 13:20 – przełącz na plan B: ręczny statu
 Testy A–D: nie każdy musi zrobić C (650 000). Minimum: 50 000 i jedno odrzucenie.
 
 **Checkpoint:** umowa `Submitted` przechodzi w `In Approval`, odrzucenie kończy proces biznesowo.
+
+**Talk track (ok. 10 min):** Trigger Guard, Single Responsibility, correlation ID. Pytanie: co się stanie, jeśli `Update item` uruchomi ten sam flow drugi raz? Nie naprawiaj jeszcze – to LAB 10.
 
 ---
 
@@ -117,6 +122,8 @@ Kolejność na sali:
 Przypomnienie kontraktu: ciało używa `supplierCode`, nie nazwy dostawcy. Numer `VCM/LAB04/429` sam wybiera tryb.
 
 **Checkpoint:** uczestnik wskazuje Settings, Run after i różnicę 409 vs 500.
+
+**Talk track (ok. 10 min):** retry classification, Failure Isolation. Pytanie: czy 409 i 500 mają to samo retry? Rysunek na tablicy: `429/transient → retry`, `409 business → no blind retry`.
 
 ---
 

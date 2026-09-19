@@ -79,7 +79,7 @@ Flow powinien mieć jedną główną odpowiedzialność.
 Źle:
 
 ```text
-Contract Created
+Contract Submitted
 + approval
 + generowanie dokumentu
 + zapis PDF
