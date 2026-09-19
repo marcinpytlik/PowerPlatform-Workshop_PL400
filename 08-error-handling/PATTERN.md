@@ -11,7 +11,7 @@ MAIN FLOW
  |
  +-- Scope CATCH
  |     +-- Compose error context
- |     +-- Write ProcessLog
+ |     +-- Write Process Log
  |     +-- Notify support
  |
  +-- Scope FINALLY

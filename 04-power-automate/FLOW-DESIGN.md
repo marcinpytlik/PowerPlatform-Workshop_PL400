@@ -1,6 +1,8 @@
 # Projekt flowów
 
-## VCM - Contract Created
+## VCM - Contract Submitted
+
+Orchestrator. W LAB 03–04 jako `VCM - Contract Submitted - SP`, od LAB 06 na Dataverse. LAB 09 zapisuje kopię `VCM - Contract Submitted - v2`.
 
 Odpowiedzialność:
 
@@ -37,5 +39,5 @@ Odpowiedzialność:
 Odpowiedzialność:
 
 - normalizacja informacji o błędzie,
-- zapis ProcessLog,
+- zapis Process Log,
 - powiadomienie techniczne.

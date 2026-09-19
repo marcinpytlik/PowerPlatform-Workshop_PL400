@@ -36,7 +36,7 @@ Contract
   1
   +---------- N Approval
   |
-  +---------- N ProcessLog
+  +---------- N Process Log
 ```
 
 ---
@@ -160,7 +160,7 @@ Dodaj:
 | Display Name | Type |
 |---|---|
 | Amount | Currency |
-| Currency Code | Choice lub Text – omów oba warianty |
+| Currency Code | Choice: PLN, EUR, USD – ten sam zestaw co SharePoint |
 | Valid From | Date only |
 | Valid To | Date only |
 | Status | Choice: Contract Status |

@@ -16,8 +16,8 @@ Dodać wielojęzyczność do Canvas App bez kopiowania ekranów i bez umieszczan
 
 ## Wymagania
 
-- Canvas App z LAB 02,
-- plik `07-multilanguage/translations.csv`.
+- Canvas App `VCM - Contract Portal` po LAB 06 (źródło Dataverse),
+- plik [`../07-multilanguage/translations.csv`](../07-multilanguage/translations.csv).
 
 ---
 

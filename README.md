@@ -51,7 +51,7 @@ Power Automate Orchestrator
     +--> Approval Flow
     +--> API Integration Flow
     +--> Notification Flow
-    +--> ProcessLog
+    +--> Process Log
 
 Model-driven App
     |
@@ -83,15 +83,27 @@ Model-driven App
 
 ## Konwencja nazewnicza
 
-Przykładowy prefix solution: `vcm`.
+Prefix publishera: `vcm`. Jedno Solution: `Vendor Contract Management`. DEV/TEST to środowiska, nie człony nazwy Solution.
 
-- `vcm_Supplier`
-- `vcm_Contract`
-- `vcm_Approval`
-- `vcm_ProcessLog`
-- `VCM - Contract Created`
-- `VCM - Approval`
-- `VCM - API Integration`
+Tabele – nazwa wyświetlana i schema:
+
+| Wyświetlana | Schema |
+|---|---|
+| Supplier | `vcm_Supplier` |
+| Contract | `vcm_Contract` |
+| Approval | `vcm_Approval` |
+| Process Log | `vcm_ProcessLog` |
+
+Flowy:
+
+| Etap | Nazwa |
+|---|---|
+| Prototyp SharePoint (LAB 03–04) | `VCM - Contract Submitted - SP` |
+| Orchestrator Dataverse (LAB 06) | `VCM - Contract Submitted` |
+| Ta sama logika z TRY/CATCH (LAB 09) | `VCM - Contract Submitted - v2` |
+| Docelowy podział (LAB 12) | `VCM - Contract Submitted` + `VCM - Approval` + `VCM - API Integration` + `VCM - Notification` + `VCM - Error Handler` |
+
+Aplikacje: `VCM - Contract Portal` (Canvas), `VCM - Contract Administration` (Model-driven).
 
 ## Wersjonowanie
 

@@ -70,3 +70,14 @@ contractNumber, supplierCode, amount, currency, correlationId
 ```
 
 Nie wysyłamy nazwy dostawcy jako klucza biznesowego. Tryby mock API: numer umowy, nagłówek `x-mock-mode` albo `/admin/mode`.
+
+## Nazwy flowów – nie mieszaj
+
+| Kiedy | Nazwa |
+|---|---|
+| Dzień 1 | `VCM - Contract Submitted - SP` |
+| Dzień 2 po LAB 06 | `VCM - Contract Submitted` (Dataverse), SP wyłączone |
+| Dzień 3 LAB 09 | kopia `VCM - Contract Submitted - v2` |
+| LAB 12 | z v2 wycinamy child flows; nie twórz `VCM - Contract Created` |
+
+Progi akceptacji porównują surowe `Amount`. `VCM/2026/002` (150 000 EUR) idzie w Finance. E01 to osobna reguła walutowa.

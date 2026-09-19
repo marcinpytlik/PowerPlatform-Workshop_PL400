@@ -259,6 +259,7 @@ Utwórz:
 ```text
 ContractNumber = VCM/TEST/002
 Amount = 150000
+Currency = PLN
 Status = Submitted
 ```
 
@@ -293,7 +294,7 @@ Oczekiwane:
 
 ```text
 Contract = Integration Error
-ProcessLog = Error
+Process Log = Error
 notification -> TEST support
 flow run = Failed
 ```
@@ -365,7 +366,7 @@ LAB jest ukończony, gdy:
 - flowy są poprawnie aktywowane,
 - smoke test działa,
 - E2E przechodzi,
-- negative test tworzy ProcessLog,
+- negative test tworzy Process Log,
 - deployment record został wypełniony.
 
 ---

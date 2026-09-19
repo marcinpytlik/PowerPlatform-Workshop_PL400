@@ -1,28 +1,33 @@
 # Contract Administration – Model-driven App
 
+Nazwa aplikacji: `VCM - Contract Administration`. Zgodne z LAB 07.
+
 ## Navigation
 
-- Dashboard
-- Suppliers
+Bez osobnego dashboardu w wariancie 3-dniowym.
+
 - Contracts
+- Suppliers
 - Approvals
 - Process Logs
 
 ## Widoki
 
-- Contracts – Active
-- Contracts – Waiting for Approval
-- Contracts – Integration Errors
-- Contracts – Expiring in 30 days
+Budowane w LAB 07:
+
+- `VCM - Active Contracts` – Status != Rejected, sort `Valid To`
+- `VCM - Integration Errors` – Status = Integration Error
+- `VCM - Errors` na Process Log – Severity = Error lub Critical
+
+Opcjonalne rozszerzenie (nie blocker): Waiting for Approval, Expiring in 30 days.
 
 ## Formularz Contract
 
-Sekcje:
+Sekcje z LAB 07:
 
-1. Contract details
-2. Supplier
-3. Financial data
-4. Approval status
-5. Integration status
-6. Related approvals
-7. Process logs
+1. General – Contract Number, Supplier, Amount, Currency Code, Status
+2. Dates – Valid From, Valid To
+3. Integration – External System ID, Correlation ID
+4. Ownership / requestor – Requestor, Owner
+
+Na formularzu: subgrid Approvals i subgrid Process Logs.

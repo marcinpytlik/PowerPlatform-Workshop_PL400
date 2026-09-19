@@ -19,6 +19,8 @@ Filter(
 )
 ```
 
+Po LAB 06 źródłem jest Dataverse: numer umowy to primary name (`Contract Number`), nie SharePoint `Title`. `Status.Value` zostaje.
+
 ## Bezpieczniejsza konfiguracja języka
 
 ```powerfx

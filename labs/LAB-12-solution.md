@@ -54,16 +54,16 @@ W środowisku DEV pozostaje ono **unmanaged**. Przed pierwszym eksportem ustawim
 
 ---
 
-# Zadanie 3 – Dodanie tabel Dataverse
+# Zadanie 3 – Weryfikacja tabel Dataverse
 
-Dodaj istniejące:
+Tabele powstały **w tym Solution** w LAB 05. Nie twórz ich drugi raz. Sprawdź, czy w Solution są:
 
 - Supplier,
 - Contract,
 - Approval,
 - Process Log.
 
-Przy dodawaniu istniejących tabel sprawdź, czy wymagane komponenty zależne również trafiają do Solution:
+Jeżeli którejś brakuje, dodaj ją teraz. Przy dodawaniu sprawdź, czy wymagane komponenty zależne również trafiają do Solution:
 
 - columns,
 - relationships,
@@ -75,22 +75,17 @@ Nie dodawaj automatycznie wszystkiego bez refleksji; uczymy się świadomie kont
 
 ---
 
-# Zadanie 4 – Dodanie aplikacji
+# Zadanie 4 – Aplikacje w Solution
 
-Dodaj:
+`VCM - Contract Administration` powstała w Solution w LAB 07 – tylko zweryfikuj, że tam jest.
 
-```text
-VCM - Contract Portal
-VCM - Contract Administration
-```
-
-Jeżeli Canvas App była pierwotnie utworzona poza Solution, dodaj ją do rozwiązania i sprawdź zależności.
+`VCM - Contract Portal` powstała w LAB 02 poza Solution. Dodaj ją teraz i sprawdź zależności.
 
 ---
 
 # Zadanie 5 – Refaktoryzacja i dodanie flowów
 
-Po migracji z LAB 06 uporządkuj proces przed wdrożeniem. Jeśli nadal istnieje jeden monolityczny flow, rozdziel odpowiedzialności na solution-aware cloud flows/child flows tam, gdzie ma to sens.
+Po migracji z LAB 06 i error handlingu z LAB 09 punktem startu jest `VCM - Contract Submitted - v2` (albo `VCM - Contract Submitted`, jeśli nie było kopii). Jeśli nadal jest jeden monolityczny flow, rozdziel odpowiedzialności na solution-aware cloud flows/child flows tam, gdzie ma to sens.
 
 Docelowe nazwy:
 

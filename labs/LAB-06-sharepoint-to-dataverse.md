@@ -308,13 +308,17 @@ Wykonaj:
 - można utworzyć i edytować Contract,
 - Supplier Lookup działa.
 
-## Test B – 50 000
+Progi jak w LAB 03: surowe `Amount`, bez FX.
+
+## Test B – 50 000 PLN
 
 ```text
 Submitted -> In Approval -> Legal -> Approved
 ```
 
 ## Test C – 150 000
+
+Liczbowo powyżej 100 000, niezależnie od waluty.
 
 ```text
 Submitted -> Finance -> Legal -> Approved
