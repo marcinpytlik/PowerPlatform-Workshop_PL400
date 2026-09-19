@@ -1,4 +1,4 @@
-# LAB 06 – Model-driven App: Contract Administration
+# LAB 07 – Model-driven App: Contract Administration
 
 ## Cel laboratorium
 
@@ -12,7 +12,7 @@ Celem nie jest poznanie każdej opcji Model-driven Apps, lecz zrozumienie kiedy 
 
 ## Wymagania
 
-Ukończony LAB 05.
+Ukończone LAB 05 i LAB 06.
 
 ---
 

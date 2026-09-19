@@ -41,33 +41,25 @@ Contract
 
 ---
 
-# Zadanie 1 – Utworzenie Solution roboczego
+# Zadanie 1 – Utworzenie docelowego Publishera i Solution
 
-Mimo że pełny ALM omawiamy w LAB 11, komponenty Dataverse twórz od razu w dedykowanym Solution.
+Pełny ALM omawiamy później, ale już teraz tworzymy **docelowego Publishera i jedno docelowe Solution**. Nie używaj tymczasowego publishera, ponieważ prefix schematu komponentów zostaje nadany przy ich tworzeniu.
 
 1. Otwórz `make.powerapps.com`.
 2. Wybierz **Solutions**.
 3. **New solution**.
-4. Display name:
+4. Utwórz Publisher:
+   - Display name: `Vendor Contract Management`
+   - Name: `VendorContractManagement`
+   - Prefix: `vcm`
+5. Utwórz Solution:
+   - Display name: `Vendor Contract Management`
+   - Name: `VendorContractManagement`
+   - Publisher: `Vendor Contract Management`
+   - Version: `0.5.0.0`
+6. Create.
 
-```text
-Vendor Contract Management DEV
-```
-
-5. Publisher: utwórz tymczasowo lub wybierz przygotowanego `Vendor Contract Management`.
-6. Prefix docelowy:
-
-```text
-vcm
-```
-
-7. Version:
-
-```text
-0.5.0.0
-```
-
-8. Create.
+> To samo Solution będzie rozwijane do końca szkolenia. W LAB Solutions/ALM podniesiemy wersję do `1.0.0.0`, zamiast tworzyć drugie rozwiązanie.
 
 ---
 
@@ -83,6 +75,7 @@ Submitted
 In Approval
 Approved
 Rejected
+Integration Pending
 Integrated
 Integration Error
 ```

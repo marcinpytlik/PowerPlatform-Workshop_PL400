@@ -1,4 +1,4 @@
-# LAB 12 – Deployment DEV -> TEST: managed solution i smoke test
+# LAB 13 – Deployment DEV -> TEST: managed solution i smoke test
 
 ## Cel laboratorium
 
@@ -12,7 +12,7 @@ Przeprowadzić kontrolowany deployment rozwiązania Vendor Contract Management z
 
 - dwa środowiska: DEV i TEST,
 - Dataverse w obu środowiskach,
-- ukończony LAB 11,
+- ukończony LAB 12,
 - wymagane connections utworzone lub możliwe do utworzenia w TEST.
 
 ---

@@ -3,11 +3,15 @@
 ## Przed eksportem
 
 - [ ] wszystkie komponenty znajdują się w Solution
+- [ ] Canvas App korzysta z Dataverse, nie ze starego źródła SharePoint
+- [ ] produkcyjny flow używa triggera Dataverse
+- [ ] stare flow SharePoint jest wyłączone
 - [ ] brak hard-code URL i adresów środowiskowych
 - [ ] connection references są używane
 - [ ] environment variables są zdefiniowane
 - [ ] flowy mają właścicieli i poprawne połączenia
 - [ ] wykonano test funkcjonalny
+- [ ] wykonano test regresyjny po migracji SharePoint -> Dataverse
 - [ ] wykonano test błędów
 - [ ] sprawdzono zależności Solution
 - [ ] ustawiono numer wersji

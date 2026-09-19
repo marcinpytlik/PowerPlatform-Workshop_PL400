@@ -34,7 +34,7 @@ Ukończony LAB 01.
 5. Nazwa: `VCM - Contract Portal`.
 6. Zapisz aplikację.
 
-> W tenantcie jest nowszy start z danych, można również utworzyć Canvas App na podstawie listy `Contracts`, ale podczas szkolenia zrobic rozpoczęcie od pustej aplikacji – uczestnik lepiej widzi architekturę.
+> W tenantcie jest nowszy start z danych, można również utworzyć Canvas App na podstawie listy `Contracts`, ale podczas szkolenia rozpocznij od pustej aplikacji – uczestnik lepiej widzi architekturę.
 
 ---
 
@@ -73,7 +73,7 @@ Szukaj numeru umowy...
 6. Ustaw `Items` kontrolki statusu:
 
 ```powerfx
-["All", "Draft", "Submitted", "InApproval", "Approved", "Rejected", "Integrated"]
+["All", "Draft", "Submitted", "In Approval", "Approved", "Rejected", "Integration Pending", "Integrated", "Integration Error"]
 ```
 
 7. Dodaj **Vertical gallery** i nazwij `galContracts`.

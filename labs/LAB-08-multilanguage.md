@@ -1,4 +1,4 @@
-# LAB 07 – Wielojęzyczny Canvas App: PL / EN / DE
+# LAB 08 – Wielojęzyczny Canvas App: PL / EN / DE
 
 ## Cel laboratorium
 
@@ -63,7 +63,7 @@ Dodaj zabezpieczenie fallback:
 
 ```powerfx
 If(
-    !varLanguage in ["pl", "en", "de"],
+    !(varLanguage in ["pl", "en", "de"]),
     Set(varLanguage, "en")
 )
 ```

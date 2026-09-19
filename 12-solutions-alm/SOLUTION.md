@@ -1,18 +1,43 @@
 # Solution – Vendor Contract Management
 
+## Zasada
+
+Od LAB 05 rozwijamy **jedno docelowe Solution**. Nie tworzymy drugiego Solution przed deploymentem.
+
 ## Publisher
 
 - Display name: Vendor Contract Management
+- Name: VendorContractManagement
 - Prefix: vcm
+
+## Solution
+
+- Display name: Vendor Contract Management
+- Name: VendorContractManagement
+- DEV: unmanaged
+- wersja robocza: 0.5.0.0
+- pierwszy artefakt wdrożeniowy: 1.0.0.0
 
 ## Komponenty
 
 - Dataverse Tables
-- Canvas App
+- Choices
+- Canvas App korzystająca z Dataverse
 - Model-driven App
-- Cloud Flows
+- Cloud Flows / child flows
 - Connection References
 - Environment Variables
+
+## Docelowy podział flowów
+
+```text
+VCM - Contract Submitted
+   |
+   +--> VCM - Approval
+   +--> VCM - API Integration
+   +--> VCM - Notification
+   +--> VCM - Error Handler / Process Log
+```
 
 ## Environment Variables
 
@@ -26,6 +51,7 @@
 - Dataverse
 - Office 365 Outlook
 - Approvals
+- SharePoint – tylko jeśli po migracji pozostała świadoma zależność
 - HTTP / Custom Connector – zależnie od wariantu
 
 ## Wersjonowanie

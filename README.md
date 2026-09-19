@@ -106,4 +106,4 @@ MAJOR.MINOR.BUILD.REVISION
 
 ## Rozbudowane laboratoria
 
-Komplet instrukcji krok po kroku znajduje się w [`labs/README.md`](labs/README.md). Laboratoria LAB 01–12 prowadzą od modelu SharePoint, przez Canvas App, Power Automate i Dataverse, aż do managed Solution oraz deploymentu DEV -> TEST.
+Komplet instrukcji krok po kroku znajduje się w [`labs/README.md`](labs/README.md). Laboratoria LAB 01–13 prowadzą od modelu SharePoint, przez Canvas App i Power Automate na SharePoint, świadomą migrację do Dataverse, aż do managed Solution oraz deploymentu DEV -> TEST.

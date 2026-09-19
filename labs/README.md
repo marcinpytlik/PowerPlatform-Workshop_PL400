@@ -1,21 +1,22 @@
 # Laboratoria – PowerPlatform Advanced Workshop
 
-Laboratoria tworzą jedną historię: od prostego rozwiązania SharePoint + Canvas App do rozwiązania Dataverse wdrażanego jako managed Solution.
+Laboratoria tworzą jedną historię: od prostego rozwiązania SharePoint + Canvas App, przez świadomą migrację do Dataverse, aż do rozwiązania wdrażanego jako managed Solution.
 
 | LAB | Temat | Orientacyjny czas |
 |---|---|---:|
 | [LAB 01](LAB-01-sharepoint-baseline.md) | SharePoint baseline i model danych | 60–75 min |
-| [LAB 02](LAB-02-canvas-app.md) | Canvas App | 75–90 min |
+| [LAB 02](LAB-02-canvas-app.md) | Canvas App na SharePoint | 75–90 min |
 | [LAB 03](LAB-03-first-flow.md) | Pierwszy proces Approval | 90 min |
 | [LAB 04](LAB-04-http-errors.md) | HTTP, Settings, retry, Run after | 90 min |
 | [LAB 05](LAB-05-dataverse.md) | Dataverse i model relacyjny | 100–120 min |
-| [LAB 06](LAB-06-model-driven.md) | Model-driven App | 60–75 min |
-| [LAB 07](LAB-07-multilanguage.md) | Wielojęzyczny Canvas App | 60 min |
-| [LAB 08](LAB-08-error-handling.md) | Error handling i ProcessLog | 90 min |
-| [LAB 09](LAB-09-troubleshooting.md) | Troubleshooting incydentu | 75–90 min |
-| [LAB 10](LAB-10-performance.md) | Performance, delegacja, limity | 90 min |
-| [LAB 11](LAB-11-solution.md) | Solutions i ALM | 90 min |
-| [LAB 12](LAB-12-deployment.md) | DEV -> TEST deployment | 90–120 min |
+| [LAB 06](LAB-06-sharepoint-to-dataverse.md) | Migracja SharePoint -> Dataverse | 90–120 min |
+| [LAB 07](LAB-07-model-driven.md) | Model-driven App | 60–75 min |
+| [LAB 08](LAB-08-multilanguage.md) | Wielojęzyczny Canvas App | 60 min |
+| [LAB 09](LAB-09-error-handling.md) | Error handling i ProcessLog | 90 min |
+| [LAB 10](LAB-10-troubleshooting.md) | Troubleshooting incydentu | 75–90 min |
+| [LAB 11](LAB-11-performance.md) | Performance, delegacja, limity | 90 min |
+| [LAB 12](LAB-12-solution.md) | Solutions, refaktoryzacja flow i ALM | 90 min |
+| [LAB 13](LAB-13-deployment.md) | DEV -> TEST deployment | 90–120 min |
 
 ## Sposób pracy
 

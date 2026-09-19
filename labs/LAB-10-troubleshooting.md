@@ -1,4 +1,4 @@
-# LAB 09 – Troubleshooting: „flow zrobił coś kompletnie nieprzewidzianego”
+# LAB 10 – Troubleshooting: „flow zrobił coś kompletnie nieprzewidzianego”
 
 ## Cel laboratorium
 

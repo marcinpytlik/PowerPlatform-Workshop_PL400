@@ -1,4 +1,4 @@
-# LAB 08 – Error handling: TRY / CATCH / FINALLY i ProcessLog
+# LAB 09 – Error handling: TRY / CATCH / FINALLY i ProcessLog
 
 ## Cel laboratorium
 
@@ -260,21 +260,15 @@ Nie wysyłaj w email pełnych sekretów/request body, jeśli zawierają dane wra
 
 ---
 
-# Zadanie 10 – Terminate
+# Zadanie 10 – Flaga błędu technicznego
 
-Na końcu CATCH dodaj `Terminate`.
-
-Status:
+W CATCH ustaw zmienną logiczną, np.:
 
 ```text
-Failed
+varTechnicalError = true
 ```
 
-Code/message:
-
-```text
-VCM_TECHNICAL_ERROR
-```
+Nie używaj jeszcze `Terminate`. Akcja Terminate kończy run, więc umieszczona w CATCH uniemożliwiłaby wykonanie FINALLY.
 
 Omów różnicę:
 
@@ -302,6 +296,25 @@ W bardziej rozbudowanym wariancie FINALLY może:
 
 ---
 
+# Zadanie 12 – Zakończenie technicznego failure
+
+**Po FINALLY** dodaj Condition:
+
+```text
+varTechnicalError = true
+```
+
+Dla Yes dodaj `Terminate`:
+
+```text
+Status = Failed
+Code = VCM_TECHNICAL_ERROR
+```
+
+Dzięki temu FINALLY wykonuje się zarówno po sukcesie, jak i po błędzie, a końcowy status runu nadal poprawnie sygnalizuje awarię techniczną.
+
+---
+
 # Testy
 
 ## Test 1 – 201
@@ -321,9 +334,10 @@ Oczekiwane:
 
 ```text
 TRY failed
-CATCH succeeded until Terminate
+CATCH succeeded
 ProcessLog created
 Contract = Integration Error
+FINALLY succeeded
 flow final status = Failed
 ```
 

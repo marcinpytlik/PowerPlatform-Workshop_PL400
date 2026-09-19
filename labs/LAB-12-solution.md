@@ -1,4 +1,4 @@
-# LAB 11 – Solutions i ALM: pakowanie Vendor Contract Management
+# LAB 12 – Solutions i ALM: pakowanie Vendor Contract Management
 
 ## Cel laboratorium
 
@@ -21,30 +21,20 @@ Po laboratorium uczestnik potrafi:
 
 ---
 
-# Zadanie 1 – Publisher
+# Zadanie 1 – Weryfikacja Publishera i Solution
 
-1. `make.powerapps.com` -> Solutions.
-2. Otwórz listę Publishers lub utwórz Publisher przy tworzeniu Solution.
-3. Display name:
+W LAB 05 utworzyliśmy docelowego Publishera i jedno Solution. **Nie twórz teraz drugiego rozwiązania.**
 
-```text
-Vendor Contract Management
-```
-
-4. Name:
+Sprawdź:
 
 ```text
-VendorContractManagement
+Publisher: Vendor Contract Management
+Prefix: vcm
+Solution: Vendor Contract Management
+Current version: 0.5.0.0
 ```
 
-5. Prefix:
-
-```text
-vcm
-```
-
-6. Option value prefix pozostaw zgodny ze standardem organizacji.
-7. Save.
+Jeżeli którykolwiek z kluczowych komponentów powstał z innym prefixem, zatrzymaj się i omów konsekwencje. Zmiana publishera później nie zmienia schema names już utworzonych komponentów.
 
 ## Dyskusja
 
@@ -52,18 +42,15 @@ Dlaczego nie chcemy przypadkowych prefixów `new_` i komponentów rozrzuconych p
 
 ---
 
-# Zadanie 2 – Solution
+# Zadanie 2 – Przygotowanie wersji 1.0.0.0
 
-Utwórz:
+Otwórz istniejące Solution `Vendor Contract Management`.
+
+W środowisku DEV pozostaje ono **unmanaged**. Przed pierwszym eksportem ustawimy wersję:
 
 ```text
-Display name: Vendor Contract Management
-Name: VendorContractManagement
-Publisher: Vendor Contract Management
-Version: 1.0.0.0
+1.0.0.0
 ```
-
-W środowisku DEV pracujemy na Solution jako **unmanaged**.
 
 ---
 
@@ -101,9 +88,9 @@ Jeżeli Canvas App była pierwotnie utworzona poza Solution, dodaj ją do rozwi�
 
 ---
 
-# Zadanie 5 – Dodanie flowów
+# Zadanie 5 – Refaktoryzacja i dodanie flowów
 
-Dodaj wszystkie flowy VCM.
+Po migracji z LAB 06 uporządkuj proces przed wdrożeniem. Jeśli nadal istnieje jeden monolityczny flow, rozdziel odpowiedzialności na solution-aware cloud flows/child flows tam, gdzie ma to sens.
 
 Docelowe nazwy:
 
@@ -115,7 +102,18 @@ VCM - Notification
 VCM - Error Handler
 ```
 
-Jeżeli podczas wcześniejszych LAB istnieje jeden monolityczny flow, możesz zachować go jako `VCM - Contract Process` i omówić docelowy podział.
+Minimalny docelowy układ:
+
+```text
+VCM - Contract Submitted (orchestrator)
+   |
+   +--> VCM - Approval
+   +--> VCM - API Integration
+   +--> VCM - Notification
+   +--> VCM - Error Handler / Process Log
+```
+
+Jeżeli ograniczenia środowiska uniemożliwiają child flows, zachowaj podział odpowiedzialności w osobnych solution-aware flows i udokumentuj sposób ich wywołania.
 
 ---
 

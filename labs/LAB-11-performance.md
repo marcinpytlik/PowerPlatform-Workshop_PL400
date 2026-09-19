@@ -1,4 +1,4 @@
-# LAB 10 – Performance i limity: SharePoint, Canvas App i Power Automate
+# LAB 11 – Performance i limity: SharePoint, Canvas App i Power Automate
 
 ## Cel laboratorium
 
