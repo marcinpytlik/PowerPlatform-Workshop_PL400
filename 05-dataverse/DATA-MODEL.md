@@ -1,5 +1,7 @@
 # Model Dataverse
 
+Nazwy poniżej to **schema names**. W maker portal wyświetlane są z odstępami: `Supplier Code`, `Contract Number`, `Currency Code`, `Process Log`.
+
 ## vcm_Supplier
 
 - SupplierId – GUID
@@ -15,7 +17,7 @@
 - ContractNumber – Text / Alternate Key
 - Supplier – Lookup -> Supplier
 - Amount – Currency
-- Currency – Choice
+- CurrencyCode – Choice (PLN, EUR, USD)
 - ValidFrom – Date
 - ValidTo – Date
 - Status – Choice

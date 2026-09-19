@@ -17,7 +17,7 @@
 
 ## 09:00–10:15 – LAB 09 error handling (75 min)
 
-Zaczynaj od kopii flow, nie od edycji jedynej działającej wersji.
+Zaczynaj od kopii `VCM - Contract Submitted` zapisanej jako `VCM - Contract Submitted - v2`. Nie edytuj jedynej działającej wersji i nie wracaj do flow SharePoint.
 
 Demo 15 min: Scope TRY / CATCH / FINALLY i Run after. Potem uczestnicy mapują Process Log.
 

@@ -24,7 +24,7 @@ Od LAB 05 rozwijamy **jedno docelowe Solution**. Nie tworzymy drugiego Solution 
 - Choices
 - Canvas App korzystająca z Dataverse
 - Model-driven App
-- Cloud Flows / child flows
+- Cloud Flows / child flows (`VCM - Contract Submitted`, nie `Contract Created`)
 - Connection References
 - Environment Variables
 

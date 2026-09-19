@@ -22,9 +22,12 @@ Porównać rozwiązanie „działa” z rozwiązaniem „skaluje się rozsądnie
 
 ## Wymagania
 
-- lista Contracts zawierająca większy zestaw danych – rekomendowane 500–5000 rekordów szkoleniowych,
-- Canvas App,
-- flow Power Automate.
+- lista SharePoint `Contracts` z LAB 01 – nadal istnieje jako punkt odniesienia; nie włączaj z powrotem `VCM - Contract Submitted - SP`,
+- większy zestaw danych na tej liście albo świadomie mały zestaw i uczciwy wniosek, że pomiar jest orientacyjny,
+- Canvas App `VCM - Contract Portal` (już na Dataverse – delegacja w części B),
+- osobny flow testowy, nie produkcyjny orchestrator.
+
+Część A (Get items) celowo wraca do SharePoint, żeby pokazać Filter Query. Część B mierzy Canvas na Dataverse.
 
 ---
 

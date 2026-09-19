@@ -24,7 +24,7 @@
 - [ ] włącz wymagane flowy
 - [ ] wykonaj smoke test
 - [ ] wykonaj scenariusz end-to-end
-- [ ] sprawdź ProcessLog
+- [ ] sprawdź Process Log
 
 ## PROD
 

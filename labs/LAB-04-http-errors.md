@@ -332,7 +332,7 @@ HTTP failed
 -> Contract nie otrzymuje statusu Integrated
 ```
 
-Na tym etapie log może być zapisany w SharePoint lub Compose. Docelowy `ProcessLog` zbudujemy w LAB 09.
+Na tym etapie log może być zapisany w SharePoint lub Compose. Docelowy Process Log zbudujemy w LAB 09.
 
 ---
 

@@ -40,13 +40,13 @@ Generate CorrelationId
 Update Status = In Approval
         |
         v
-Finance required?
+ścieżka wg Amount (bez przeliczenia waluty)
         |
-        +-- Amount <= 100000 ------> Legal Approval
+        +-- Amount <= 100000 ---------------------> Legal
         |
-        +-- Amount > 100000 -------> Finance Approval -> Legal Approval
+        +-- Amount > 100000 i <= 500000 -----------> Finance -> Legal
         |
-        +-- Amount > 500000 -------> Management Approval
+        +-- Amount > 500000 -----------------------> Finance -> Legal -> Management
         |
         v
 Approved / Rejected
@@ -284,7 +284,11 @@ Subject: Contract <ContractNumber> approved
 
 # Zadanie 10 – Testy
 
-## Test A – 50 000
+Progi są liczbowe, bez FX. `VCM/2026/002` ma 150 000 EUR i i tak idzie w Finance.
+
+## Test A – 50 000 PLN
+
+Nowa umowa albo `VCM/2026/001` ustawione na `Submitted`.
 
 Oczekiwane:
 
@@ -294,13 +298,17 @@ Legal only -> Approved
 
 ## Test B – 150 000
 
+`VCM/2026/002` (EUR w danych testowych).
+
 Oczekiwane:
 
 ```text
 Finance -> Legal -> Approved
 ```
 
-## Test C – 650 000
+## Test C – 650 000 PLN
+
+`VCM/2026/003`.
 
 Oczekiwane:
 

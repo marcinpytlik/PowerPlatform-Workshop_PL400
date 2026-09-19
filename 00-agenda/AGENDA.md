@@ -76,7 +76,7 @@ Pełna macierz testów B/timeout jest demo prowadzącego, jeśli czas się końc
 - alternate keys,
 - auditing,
 - podstawy security roles,
-- model Supplier–Contract–Approval–ProcessLog.
+- model Supplier–Contract–Approval–Process Log.
 
 Relacje N:N są tematem dyskusji, nie częścią modelu VCM.
 
@@ -113,6 +113,8 @@ Wielojęzyczność Canvas App jest **opcjonalna**. Robimy ją tylko wtedy, gdy L
 
 Implementacja podziału jest w LAB 12. Tu rysujemy cięcia.
 
+## 15:15–15:30 – Przerwa
+
 ## 15:30–16:00 – Architektura: flow czy kod?
 
 - Power Automate,
@@ -130,7 +132,7 @@ Implementacja podziału jest w LAB 12. Tu rysujemy cięcia.
 - Configure run after,
 - `Terminate` dopiero po FINALLY,
 - retry policy i timeout,
-- logowanie błędów do ProcessLog.
+- logowanie błędów do Process Log.
 
 ## 10:15–11:15 – Diagnostyka incydentu (LAB 10)
 

@@ -57,13 +57,16 @@ Scope FINALLY
 
 Nie przebudowuj jedynego działającego flow bez punktu odniesienia.
 
-1. Otwórz flow z LAB 04.
-2. Zapisz kopię lub utwórz nową wersję w Solution.
-3. Nazwa:
+1. Otwórz Dataverse flow `VCM - Contract Submitted` z LAB 06 (z przeniesioną integracją HTTP z LAB 04).
+2. Nie wracaj do `VCM - Contract Submitted - SP`.
+3. Zapisz kopię w Solution.
+4. Nazwa:
 
 ```text
-VCM - Contract Integration - v2
+VCM - Contract Submitted - v2
 ```
+
+To nadal orchestrator. Wydzielenie `VCM - API Integration` jest w LAB 12.
 
 ---
 
@@ -137,7 +140,7 @@ Docelowy logiczny rekord:
 
 ```json
 {
-  "flowName": "VCM - Contract Integration - v2",
+  "flowName": "VCM - Contract Submitted - v2",
   "flowRunId": "...",
   "correlationId": "...",
   "contractNumber": "...",
