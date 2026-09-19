@@ -23,3 +23,5 @@ SharePoint zostaje punktem odniesienia. Stary flow jest wyłączony, nie usuwany
 ## Instrukcja
 
 Krok po kroku: [`../labs/LAB-06-sharepoint-to-dataverse.md`](../labs/LAB-06-sharepoint-to-dataverse.md).
+
+Wzorzec: **Strangler Migration** – [`../00-architecture/POWER-PLATFORM-PATTERNS.md`](../00-architecture/POWER-PLATFORM-PATTERNS.md). Na sali: [`../trainer/THEORY-TALK-TRACK.md`](../trainer/THEORY-TALK-TRACK.md).
