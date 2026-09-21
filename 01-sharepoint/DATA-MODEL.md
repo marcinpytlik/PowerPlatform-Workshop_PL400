@@ -42,3 +42,8 @@
 ## Ograniczenia SharePoint jako backendu aplikacji
 
 Przed LAB 05 warto przeczytać [SHAREPOINT-LIMITS-AND-CONSTRAINTS.md](SHAREPOINT-LIMITS-AND-CONSTRAINTS.md). Dokument zbiera limity list i bibliotek, delegację Power Apps, problemy z lookupami, security scopes, Get items, throttling, trigger loops oraz kryteria przejścia do Dataverse.
+
+
+## Kiedy używać własnego webparta / SPFx
+
+Zobacz [WHEN-TO-USE-SPFX-WEBPART.md](WHEN-TO-USE-SPFX-WEBPART.md). Materiał pokazuje, kiedy wybrać standardowy SharePoint, Power Apps, SPFx albo pełną aplikację customową oraz dlaczego SPFx nie usuwa ograniczeń SharePoint jako backendu.
