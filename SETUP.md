@@ -159,14 +159,72 @@ Tryby:
 
 ## Uruchomienie prowadzącego
 
-Najprostszy wariant na sali:
+Dla szkolenia zdalnego zalecany wariant to Docker + publiczny HTTPS.
 
-```bash
-cd mock-api
-python3 server.py
+### 1. Zbuduj obraz
+
+Z katalogu głównego repozytorium:
+
+```powershell
+docker build -t vcm-mock-api ./mock-api
 ```
 
-Domyślnie nasłuchuje na `0.0.0.0:8080`. Publiczny URL (ngrok, cloudflared, Container Apps, Azure Function) wpisz do Environment Variable `VCM_API_BASE_URL`.
+### 2. Uruchom kontener
+
+```powershell
+docker run -d --name vcm-mock-api -p 8080:8080 vcm-mock-api
+```
+
+### 3. Sprawdź lokalnie
+
+```powershell
+Invoke-RestMethod http://localhost:8080/health
+```
+
+### 4. Zainstaluj Cloudflare Tunnel
+
+```powershell
+winget install --id Cloudflare.cloudflared
+cloudflared --version
+```
+
+### 5. Wystaw lokalne API przez HTTPS
+
+```powershell
+cloudflared tunnel --url http://localhost:8080
+```
+
+Cloudflare zwróci adres w stylu:
+
+```text
+https://example-random-name.trycloudflare.com
+```
+
+### 6. Sprawdź publiczny endpoint
+
+```powershell
+Invoke-RestMethod https://example-random-name.trycloudflare.com/health
+```
+
+### 7. Przekaż URL uczestnikom
+
+Base URL:
+
+```text
+https://example-random-name.trycloudflare.com
+```
+
+Endpoint LAB 04:
+
+```text
+POST {BASE_URL}/api/contracts
+```
+
+Ten sam Base URL wpisz do Environment Variable `VCM_API_BASE_URL`.
+
+> Nie zamykaj procesu `cloudflared` w czasie zajęć. Quick Tunnel ma tymczasowy adres; po ponownym uruchomieniu może zostać wygenerowany inny URL. Dla warsztatu wielodniowego rozważ Named Tunnel lub stały hosting.
+
+Pełna instrukcja techniczna: [mock-api/PUBLIC-ACCESS.md](mock-api/PUBLIC-ACCESS.md).
 
 ## Check
 
