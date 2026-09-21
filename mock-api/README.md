@@ -19,14 +19,116 @@ Domyślny adres: `http://localhost:8080`.
 | `VCM_MOCK_TIMEOUT_SECONDS` | `35` | opóźnienie trybu `timeout` |
 | `VCM_MOCK_RETRY_AFTER` | `10` | wartość nagłówka `Retry-After` |
 
-Kontener:
+## Uruchomienie w Dockerze
 
-```bash
+Z katalogu głównego repozytorium:
+
+```powershell
 docker build -t vcm-mock-api ./mock-api
 docker run --rm -p 8080:8080 vcm-mock-api
 ```
 
-Na sali wystaw publiczny HTTPS (ngrok, cloudflared, Container Apps). Ten URL trafia do `VCM_API_BASE_URL`.
+Sprawdzenie:
+
+```powershell
+Invoke-RestMethod http://localhost:8080/health
+```
+
+Uruchomienie w tle:
+
+```powershell
+docker run -d --name vcm-mock-api -p 8080:8080 vcm-mock-api
+```
+
+Logi:
+
+```powershell
+docker logs vcm-mock-api
+```
+
+Zatrzymanie:
+
+```powershell
+docker stop vcm-mock-api
+docker rm vcm-mock-api
+```
+
+## Publiczny dostęp dla zdalnych uczestników
+
+Adres `localhost:8080` jest dostępny tylko na komputerze prowadzącego. Dla zdalnego warsztatu mock API musi być dostępne przez publiczny HTTPS.
+
+Najprostszy wariant developersko-szkoleniowy:
+
+```text
+Power Automate uczestnika
+        |
+        v
+https://<losowa-nazwa>.trycloudflare.com
+        |
+        v
+Cloudflare Quick Tunnel
+        |
+        v
+http://localhost:8080
+        |
+        v
+Docker: vcm-mock-api
+```
+
+Instalacja `cloudflared` na Windows:
+
+```powershell
+winget install --id Cloudflare.cloudflared
+cloudflared --version
+```
+
+Uruchomienie tunelu:
+
+```powershell
+cloudflared tunnel --url http://localhost:8080
+```
+
+Po chwili pojawi się publiczny URL, np.:
+
+```text
+https://example-random-name.trycloudflare.com
+```
+
+Sprawdzenie:
+
+```powershell
+Invoke-RestMethod https://example-random-name.trycloudflare.com/health
+```
+
+Endpoint dla uczestników:
+
+```text
+POST https://example-random-name.trycloudflare.com/api/contracts
+```
+
+Przykładowy test:
+
+```powershell
+$body = @{
+    contractNumber = "VCM/LAB04/201"
+    supplierCode   = "SUP-001"
+    amount         = 50000
+    currency       = "PLN"
+    correlationId  = "demo-001"
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+    -Method Post `
+    -Uri "https://example-random-name.trycloudflare.com/api/contracts" `
+    -ContentType "application/json" `
+    -Body $body
+```
+
+> Quick Tunnel jest rozwiązaniem tymczasowym. Po zatrzymaniu `cloudflared` adres przestaje działać, a po ponownym uruchomieniu zwykle powstaje nowy URL. Na warsztat wielodniowy lepszy jest Named Tunnel albo stały hosting.
+
+Pełna instrukcja: [PUBLIC-ACCESS.md](PUBLIC-ACCESS.md).
+
+Publiczny URL trafia następnie do `VCM_API_BASE_URL`.
 
 ## Kontrakt
 
