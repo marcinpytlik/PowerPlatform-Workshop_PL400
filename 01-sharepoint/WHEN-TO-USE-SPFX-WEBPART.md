@@ -1,43 +1,100 @@
 # Kiedy stosować własny webpart w SharePoint Online
 
-## Cel materiału
+## Cel dokumentu
 
-Ten dokument pomaga podjąć decyzję, kiedy wystarczy standardowy SharePoint, kiedy lepszym wyborem jest Power Apps, a kiedy warto napisać własny komponent w SharePoint Framework (SPFx).
+Dokument opisuje, kiedy warto użyć własnego komponentu opartego o SharePoint Framework (SPFx), kiedy lepszym wyborem jest Power Apps, a kiedy rozwiązanie powinno być zbudowane jako niezależna aplikacja webowa.
 
-> **Power Apps służy przede wszystkim do budowania aplikacji. SPFx służy przede wszystkim do rozszerzania doświadczenia SharePoint.**
+Najważniejsze rozróżnienie:
 
-## 1. Czym jest własny webpart
+> **Power Apps służy przede wszystkim do budowania aplikacji biznesowych. SPFx służy przede wszystkim do rozszerzania doświadczenia SharePoint.**
 
-W nowoczesnym SharePoint Online rekomendowanym modelem rozszerzania interfejsu jest SharePoint Framework (SPFx). SPFx pozwala budować własne komponenty klienckie, najczęściej w TypeScript/React/JavaScript, pakowane jako `.sppkg` i wdrażane przez App Catalog.
+---
+
+# 1. Czym jest SPFx
+
+SharePoint Framework (SPFx) jest rekomendowanym modelem rozszerzania nowoczesnego SharePoint Online.
+
+Pozwala budować komponenty klienckie, najczęściej w:
+
+```text
+TypeScript
+React
+JavaScript
+```
+
+Rozwiązania SPFx są pakowane jako:
+
+```text
+.sppkg
+```
+
+i wdrażane przez App Catalog.
+
+SPFx może być używany do budowania:
+
+- webpartów,
+- rozszerzeń list i bibliotek,
+- własnych komend,
+- niestandardowego renderowania pól,
+- rozszerzeń interfejsu SharePoint,
+- niestandardowych formularzy.
 
 Dokumentacja:
-- https://learn.microsoft.com/en-us/sharepoint/dev/spfx/sharepoint-framework-overview
-- https://learn.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/overview-client-side-web-parts
-- https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/overview-extensions
+- SPFx overview: https://learn.microsoft.com/en-us/sharepoint/dev/spfx/sharepoint-framework-overview
+- Client-side web parts: https://learn.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/overview-client-side-web-parts
+- SPFx Extensions: https://learn.microsoft.com/en-us/sharepoint/dev/spfx/extensions/overview-extensions
 
-## 2. Kiedy SPFx ma sens
+---
 
-SPFx ma sens przede wszystkim wtedy, gdy głównym miejscem pracy użytkownika jest SharePoint, ale standardowe webparty i Power Apps nie dają odpowiedniego UX lub poziomu integracji.
+# 2. Kiedy SPFx ma sens
 
-Typowe przypadki:
-- niestandardowy dashboard osadzony na stronie SharePoint,
-- specjalna tabela lub grid,
-- drag & drop,
-- własny komponent React,
-- akcje na zaznaczonych dokumentach,
-- niestandardowe renderowanie pól,
-- rozszerzenie toolbaru,
-- integracja mocno związana z kontekstem bieżącej witryny.
+SPFx jest dobrym wyborem, gdy:
 
-## 3. Najważniejsze pytanie
+- głównym miejscem pracy użytkownika jest SharePoint,
+- standardowe webparty nie wystarczają,
+- wymagany jest niestandardowy UX,
+- rozwiązanie ma reagować na kontekst bieżącej witryny,
+- potrzebne są własne akcje na listach lub bibliotekach,
+- potrzebna jest integracja z Microsoft Graph lub własnym API,
+- zespół akceptuje klasyczny model developmentu i utrzymania kodu.
 
-> Czy buduję aplikację, czy rozszerzam SharePoint?
+Typowe scenariusze:
 
-Jeśli użytkownik ma pozostać na stronie SharePoint i potrzebuje tam niestandardowej wizualizacji, interakcji lub integracji z kontekstem witryny, SPFx jest naturalnym kandydatem.
+```text
+custom dashboard
+niestandardowy grid
+drag & drop
+własny toolbar
+akcje na zaznaczonych dokumentach
+niestandardowy formularz
+własny rendering pola
+integracja z kontekstem strony
+```
 
-## 4. Przykład: dashboard VCM
+---
 
-Przykładowy webpart:
+# 3. SPFx jako rozszerzenie SharePoint
+
+SPFx najlepiej pasuje do sytuacji, w której SharePoint pozostaje główną powierzchnią użytkownika.
+
+Przykład:
+
+```text
+SharePoint Portal
+   |
+   +--> standardowa nawigacja
+   +--> biblioteki dokumentów
+   +--> listy
+   +--> własny SPFx dashboard
+```
+
+W takim modelu SPFx nie zastępuje SharePoint, tylko rozszerza jego interfejs.
+
+---
+
+# 4. Przykład: dashboard VCM
+
+Dla Vendor Contract Management można zbudować webpart prezentujący dane bezpośrednio na stronie SharePoint:
 
 ```text
 Moje umowy
@@ -56,78 +113,182 @@ VCM-1002   In Approval
 VCM-1003   Integrated
 ```
 
-Taki komponent może pobierać dane z SharePoint, Dataverse lub API i prezentować je bezpośrednio w portalu SharePoint.
+Taki komponent może:
 
-## 5. Kiedy Power Apps jest lepsze
+- korzystać z kontekstu bieżącego użytkownika,
+- pobierać dane z SharePoint,
+- pobierać dane z Dataverse,
+- komunikować się z własnym API,
+- wyświetlać dane w niestandardowy sposób,
+- działać bezpośrednio w portalu SharePoint.
 
-Power Apps preferujemy, gdy wymaganie wygląda jak klasyczna aplikacja biznesowa:
-- formularz,
+---
+
+# 5. Kiedy Power Apps jest lepsze
+
+Power Apps jest naturalnym wyborem, gdy rozwiązanie ma charakter aplikacji biznesowej.
+
+Typowe wymagania:
+
+- formularze,
 - CRUD,
 - kilka ekranów,
 - walidacja,
-- proces użytkownika,
-- workflow.
+- workflow,
+- obsługa procesu użytkownika,
+- integracja z konektorami.
 
-Przykład: New Contract, Edit Contract, Submit, Approve, View status.
-
-W takim przypadku pisanie SPFx może tylko zwiększyć koszt implementacji i utrzymania.
-
-## 6. Kiedy SPFx zaczyna wygrywać z Power Apps
-
-Sygnały:
-- bardzo niestandardowy UX,
-- zaawansowany grid,
-- drag & drop,
-- własne menu lub akcje,
-- wyspecjalizowane wizualizacje,
-- integracja z kontekstem strony SharePoint.
-
-Canvas App daje dużą elastyczność, ale nadal działa w modelu Power Apps. SPFx daje klasyczny frontend webowy uruchomiony w SharePoint.
-
-## 7. Przykład: własna akcja na dokumentach
-
-Użytkownik zaznacza kilka dokumentów i ma dostać komendę `Wyślij do archiwum ERP`.
+Przykład:
 
 ```text
-Selected documents
+New Contract
+Edit Contract
+Submit
+Approve
+View Status
+```
+
+W takim przypadku Power Apps zwykle pozwala dostarczyć rozwiązanie szybciej i przy mniejszym koszcie utrzymania niż własny frontend SPFx.
+
+---
+
+# 6. Kiedy SPFx zaczyna wygrywać z Power Apps
+
+SPFx daje przewagę, gdy potrzebna jest większa kontrola nad frontendem.
+
+Przykłady:
+
+- zaawansowany grid,
+- niestandardowy layout,
+- drag & drop,
+- złożone komponenty React,
+- własne menu kontekstowe,
+- wyspecjalizowane wizualizacje,
+- bardzo precyzyjna kontrola zachowania UI,
+- integracja z elementami strony SharePoint.
+
+Power Apps działa w modelu platformy low-code.
+
+SPFx daje klasyczny frontend webowy działający w ramach SharePoint.
+
+---
+
+# 7. Własne akcje na dokumentach
+
+Przykład:
+
+Użytkownik zaznacza kilka dokumentów w bibliotece i wybiera:
+
+```text
+Wyślij do archiwum ERP
+```
+
+Architektura:
+
+```text
+Selected Documents
        |
        v
-Custom command
+SPFx Command Set
        |
        v
 API / Power Automate
        |
        v
-Status / notification
+Status / Notification
 ```
 
-W takim scenariuszu naturalnym rozwiązaniem jest SPFx ListView Command Set, a nie osobna Canvas App.
+W takim scenariuszu SPFx ListView Command Set jest zwykle naturalniejszy niż budowanie osobnej aplikacji Canvas tylko po to, aby wykonać akcję na istniejącej bibliotece.
 
-## 8. Przykład: własne renderowanie pola
+---
 
-Jeśli chcemy pokazać statusy z ikonami, tooltipami i bardziej złożonym zachowaniem, najpierw warto sprawdzić column formatting. Gdy potrzebna jest logika wykraczająca poza formatting, można rozważyć SPFx Field Customizer.
+# 8. Niestandardowe renderowanie pól
 
-## 9. SPFx Extensions
+Dla prostych zmian prezentacji często wystarczy SharePoint Column Formatting.
 
-SPFx to nie tylko webparty. Dostępne są m.in.:
-- Application Customizer,
-- Field Customizer,
-- ListView Command Set,
-- Form Customizer.
+Przykład:
 
-Dzięki temu możemy rozszerzać strony, listy, biblioteki, formularze, toolbar i rendering pól.
+```text
+Integrated          ✓
+In Approval         ⧗
+Rejected            ✕
+Integration Error   ⚠
+```
 
-## 10. Integracja z Microsoft 365
+Jeżeli jednak potrzebne są:
 
-SPFx działa w kontekście użytkownika SharePoint i może integrować się z SharePoint REST, Microsoft Graph oraz własnymi API. Pozwala wykorzystywać kontekst użytkownika, witryny i strony.
+- bardziej zaawansowana logika,
+- dynamiczne zachowanie,
+- integracja z API,
+- dodatkowe akcje,
 
-## 11. SharePoint i Teams
+można rozważyć SPFx Field Customizer.
 
-W odpowiednich scenariuszach komponent SPFx może być wykorzystany zarówno w SharePoint, jak i w Microsoft Teams.
+---
 
-## 12. Cena użycia SPFx
+# 9. SPFx Extensions
 
-SPFx oznacza klasyczny lifecycle developerski:
+SPFx obejmuje nie tylko webparty.
+
+Dostępne są m.in.:
+
+```text
+Application Customizer
+Field Customizer
+ListView Command Set
+Form Customizer
+```
+
+Pozwala to rozszerzać:
+
+- strony,
+- listy,
+- biblioteki,
+- formularze,
+- toolbar,
+- rendering pól.
+
+---
+
+# 10. Integracja z Microsoft 365
+
+SPFx działa w kontekście użytkownika SharePoint i może integrować się z:
+
+- SharePoint REST,
+- Microsoft Graph,
+- własnymi API,
+- usługami Microsoft 365.
+
+Komponent może korzystać z informacji o:
+
+- użytkowniku,
+- witrynie,
+- stronie,
+- tenantcie,
+- aktualnym kontekście SharePoint.
+
+---
+
+# 11. SharePoint i Teams
+
+W wybranych scenariuszach komponent SPFx może być wykorzystywany także w Microsoft Teams.
+
+Możliwy model:
+
+```text
+            SPFx Component
+             /          \
+            /            \
+    SharePoint          Teams
+```
+
+Daje to możliwość ponownego wykorzystania części UI w różnych powierzchniach Microsoft 365.
+
+---
+
+# 12. Koszt użycia SPFx
+
+SPFx oznacza klasyczny lifecycle developerski.
 
 ```text
 TypeScript
@@ -144,23 +305,84 @@ versioning
 maintenance
 ```
 
-> Większa kontrola oznacza większą odpowiedzialność.
+W porównaniu z Power Apps rośnie:
 
-## 13. Bezpieczeństwo
+- ilość kodu,
+- liczba zależności,
+- odpowiedzialność za bezpieczeństwo,
+- koszt testów,
+- koszt deploymentu,
+- koszt utrzymania.
 
-Kod SPFx działa w kontekście użytkownika i strony SharePoint. Trzeba kontrolować źródło kodu, zależności npm, uprawnienia do API, App Catalog, proces akceptacji i aktualizacje.
+Większa kontrola oznacza większą odpowiedzialność.
 
-SPFx nie powinien być traktowany jako sposób na obchodzenie mechanizmów bezpieczeństwa SharePoint.
+---
 
-## 14. Kiedy NIE pisać własnego webparta
+# 13. Bezpieczeństwo
 
-Nie pisz SPFx tylko po to, aby zmienić kilka szczegółów wyglądu albo gdy wymaganiem jest jedynie formularz, tabela, przycisk Save lub workflow, które można sensownie zrealizować standardowym SharePoint, Power Apps i Power Automate.
+Kod SPFx działa w kontekście SharePoint i bieżącego użytkownika.
 
-## 15. Kiedy zamiast SPFx zrobić własną aplikację
+Należy kontrolować:
 
-Jeśli wymagania obejmują dużą niezależną aplikację, wiele modułów, własny routing, złożony UX, dużo logiki backendowej, własne API albo użytkowników spoza Microsoft 365, warto zapytać, czy SharePoint w ogóle powinien być hostem tej aplikacji.
+- źródło kodu,
+- zależności npm,
+- aktualizacje bibliotek,
+- uprawnienia do Microsoft Graph i innych API,
+- App Catalog,
+- proces publikacji,
+- politykę wersjonowania.
 
-Możliwy model:
+Sekrety nie powinny być umieszczane bezpośrednio w kodzie klienta.
+
+---
+
+# 14. Kiedy nie stosować SPFx
+
+SPFx nie jest dobrym wyborem, gdy wymaganie można prosto zrealizować standardowymi mechanizmami platformy.
+
+Przykłady:
+
+```text
+prosty formularz
+standardowy CRUD
+przycisk Save
+prosty workflow
+standardowa lista danych
+standardowy dashboard
+```
+
+Jeżeli rozwiązanie można sensownie zbudować przy użyciu:
+
+```text
+SharePoint
++
+Power Apps
++
+Power Automate
+```
+
+własny komponent SPFx może jedynie zwiększyć koszt utrzymania.
+
+---
+
+# 15. Kiedy zamiast SPFx wybrać własną aplikację webową
+
+SPFx nie powinien być automatycznie wybierany tylko dlatego, że aplikacja ma działać w środowisku Microsoft 365.
+
+Jeżeli rozwiązanie wymaga:
+
+- wielu niezależnych modułów,
+- własnego routingu,
+- bardzo złożonego UX,
+- dużej ilości logiki backendowej,
+- własnego API,
+- użytkowników spoza Microsoft 365,
+- wielu źródeł danych,
+- niezależnego lifecycle aplikacji,
+
+warto rozważyć klasyczną aplikację webową.
+
+Przykład:
 
 ```text
 React / Angular / Blazor
@@ -169,10 +391,14 @@ React / Angular / Blazor
          API
           |
           v
-Dataverse / SQL / services
+Dataverse / SQL / Services
 ```
 
-## 16. Drzewo decyzyjne
+SharePoint może wtedy pozostać jednym z systemów integracyjnych zamiast hostem całej aplikacji.
+
+---
+
+# 16. Drzewo decyzyjne
 
 ```text
 Potrzebuję rozwiązania
@@ -206,7 +432,9 @@ Czy głównym miejscem pracy jest SharePoint?
 Power Apps / custom app
 ```
 
-## 17. Szybka macierz wyboru
+---
+
+# 17. Macierz wyboru
 
 | Potrzeba | Preferowany kierunek |
 |---|---|
@@ -219,35 +447,102 @@ Power Apps / custom app
 | własna akcja w bibliotece | SPFx Command Set |
 | zaawansowany custom rendering | SPFx |
 | custom toolbar | SPFx |
-| komponent mocno związany z kontekstem witryny | SPFx |
+| komponent zależny od kontekstu witryny | SPFx |
 | duża niezależna aplikacja | custom web app |
 | ciężka logika backendowa | API / kod backendowy |
 
-## 18. SPFx nie usuwa ograniczeń SharePoint
+---
 
-To bardzo ważne:
+# 18. Power Apps vs SPFx
 
-> SPFx daje większą kontrolę nad frontendem, ale nie usuwa ograniczeń SharePoint jako backendu.
+## Power Apps
 
-Jeśli lista ma problemy z List View Threshold, lookupami, security scopes, throttlingiem lub modelem relacji, napisanie webparta nie sprawi, że te ograniczenia znikną.
+Zalety:
 
-Przykład błędnego wniosku:
+- szybkie tworzenie,
+- low-code,
+- formularze,
+- Power Fx,
+- integracja z konektorami,
+- szybki prototyping.
+
+Ograniczenia:
+
+- mniejsza kontrola nad frontendem niż w klasycznym web development,
+- specyficzny model UI,
+- delegacja,
+- ograniczenia przy bardzo niestandardowym UX.
+
+## SPFx
+
+Zalety:
+
+- pełna kontrola nad frontendem,
+- React / TypeScript,
+- naturalna integracja z SharePoint,
+- dostęp do kontekstu użytkownika i witryny,
+- możliwość tworzenia extensions.
+
+Koszt:
+
+- więcej kodu,
+- deployment,
+- dependency management,
+- testowanie,
+- governance,
+- utrzymanie.
+
+---
+
+# 19. SPFx nie usuwa ograniczeń SharePoint
+
+SPFx zmienia sposób budowania frontendów.
+
+Nie zmienia fundamentalnych ograniczeń SharePoint jako backendu.
+
+Jeżeli źródło danych ma problemy z:
+
+- List View Threshold,
+- lookupami,
+- security scopes,
+- throttlingiem,
+- modelem relacji,
+- strukturą danych,
+
+przeniesienie UI z Power Apps do SPFx nie usuwa tych problemów.
+
+Przykład:
 
 ```text
-Canvas App ma problem z listą 500 000 rekordów
-i złożonym modelem relacji
-        |
-        v
-napiszmy SPFx
+Canvas App
+      |
+      v
+SharePoint list 500 000 rekordów
+      |
+      v
+problem modelu danych
 ```
 
-Poprawne pytanie brzmi:
+Zmiana na:
 
-> Czy problemem jest UI, czy model danych?
+```text
+SPFx
+ |
+ v
+ta sama lista
+```
 
-Jeśli problemem jest model danych, SPFx na tej samej liście może nadal mieć te same problemy backendowe.
+może pozostawić problem bez zmian.
 
-## 19. Dobry scenariusz hybrydowy
+Najpierw należy ustalić, czy problem leży w UI, czy w backendzie.
+
+---
+
+# 20. Architektura hybrydowa
+
+SPFx może dobrze współpracować z innymi usługami.
+
+Przykład:
 
 ```text
 SharePoint Portal
@@ -262,9 +557,18 @@ SPFx Dashboard
       +------> SharePoint Documents
 ```
 
-SharePoint może pełnić rolę portalu, Dataverse przechowywać dane domenowe, biblioteka SharePoint dokumenty, a SPFx składać wszystko w spójny UX.
+W takim modelu:
 
-## 20. VCM – możliwa architektura rozszerzona
+- SharePoint pełni rolę portalu,
+- Dataverse przechowuje dane domenowe,
+- biblioteka SharePoint przechowuje dokumenty,
+- SPFx odpowiada za portalowy UX.
+
+---
+
+# 21. Przykład architektury VCM
+
+Rozszerzona architektura Vendor Contract Management może wyglądać tak:
 
 ```text
 SharePoint Portal
@@ -284,76 +588,132 @@ Power Automate
       +--> Process Log
 ```
 
-Dokumenty mogą pozostać w SharePoint Document Library, dane domenowe w Dataverse, proces w Power Automate, a UX portalowy w SPFx.
+Dokumenty:
 
-## 21. Pytania przed wyborem SPFx
+```text
+SharePoint Document Library
+```
 
-1. Czy użytkownik ma pracować bezpośrednio w SharePoint?
-2. Czy standardowy webpart naprawdę nie wystarcza?
+Dane domenowe:
+
+```text
+Dataverse
+```
+
+Proces:
+
+```text
+Power Automate
+```
+
+UX portalowy:
+
+```text
+SPFx
+```
+
+Technologie mogą więc pełnić różne role w jednym rozwiązaniu.
+
+---
+
+# 22. Pytania przed wyborem SPFx
+
+Przed podjęciem decyzji warto odpowiedzieć na pytania:
+
+1. Czy użytkownik pracuje głównie w SharePoint?
+2. Czy standardowe webparty rzeczywiście nie wystarczają?
 3. Czy Power Apps nie rozwiązuje problemu prościej?
-4. Czy potrzebujemy custom UX?
-5. Czy wymaganie dotyczy strony, biblioteki lub listy SharePoint?
-6. Czy potrzebujemy własnych komend?
-7. Czy potrzebujemy integracji z Microsoft Graph lub własnym API?
-8. Czy zespół potrafi utrzymywać TypeScript / React?
-9. Kto będzie utrzymywał rozwiązanie za dwa lata?
-10. Czy problem leży w UI, czy w modelu danych?
+4. Czy wymagany jest niestandardowy UX?
+5. Czy wymaganie dotyczy listy, biblioteki lub strony SharePoint?
+6. Czy potrzebne są własne komendy?
+7. Czy rozwiązanie wymaga integracji z Microsoft Graph lub API?
+8. Czy zespół potrafi utrzymywać TypeScript i React?
+9. Kto będzie utrzymywał rozwiązanie w kolejnych latach?
+10. Czy problem dotyczy UI, czy modelu danych?
 
-## 22. Anti-patterny
+---
 
-- Pisanie SPFx tylko dla drobnych zmian wyglądu.
-- Budowanie całego systemu biznesowego jako jednego ogromnego webparta.
-- Używanie SPFx jako obejścia ograniczeń modelu danych SharePoint.
-- Brak procesu aktualizacji zależności npm.
-- Hard-code endpointów i konfiguracji środowiskowej.
-- Umieszczanie sekretów w kodzie klienta.
+# 23. Anti-patterny
 
-## 23. Najważniejszy trade-off
+## SPFx do kosmetycznych zmian
+
+Pisanie własnego komponentu tylko po to, aby zmienić kilka elementów wyglądu zwiększa koszt utrzymania bez istotnej wartości architektonicznej.
+
+## Jeden gigantyczny webpart
+
+Budowanie całego dużego systemu biznesowego jako jednego komponentu SPFx prowadzi do trudnego w utrzymaniu monolitu frontendowego.
+
+## SPFx jako obejście ograniczeń backendu
+
+Jeżeli problem wynika z modelu danych SharePoint, zmiana technologii frontendowej nie usuwa przyczyny.
+
+## Brak zarządzania dependencies
+
+Nieaktualizowane zależności npm zwiększają ryzyko techniczne i bezpieczeństwa.
+
+## Hard-code konfiguracji
+
+Adresy API, identyfikatory środowisk i inne wartości konfiguracyjne nie powinny być zaszyte bezpośrednio w kodzie.
+
+## Sekrety w kodzie klienta
+
+Sekrety nie powinny być przechowywane w bundle JavaScript ani innych zasobach dostępnych po stronie klienta.
+
+---
+
+# 24. Główny trade-off
 
 ```text
 Power Apps
    |
-   +--> szybkość developmentu
+   +--> szybszy development
    +--> mniej kodu
-   +--> mniej kontroli
+   +--> niższy koszt wejścia
+   +--> mniejsza kontrola nad frontendem
 
 SPFx
    |
+   +--> pełniejsza kontrola
+   +--> większa elastyczność UI
    +--> więcej kodu
-   +--> większy koszt
-   +--> większa kontrola
+   +--> większy koszt utrzymania
 ```
 
-Nie istnieje technologia lepsza w każdym przypadku. Istnieje technologia lepiej dopasowana do problemu.
+Żadna z technologii nie jest lepsza w każdym scenariuszu.
 
-## 24. Jak powiedzieć to uczestnikom
+Wybór powinien wynikać z wymagań rozwiązania.
 
-> Jeśli potrzebuję aplikacji biznesowej, najpierw patrzę na Power Apps.
+---
 
-> Jeśli potrzebuję rozszerzyć istniejące doświadczenie SharePoint, patrzę na SPFx.
+# 25. Podsumowanie
 
-> Jeśli buduję dużą niezależną aplikację, pytam, czy SharePoint w ogóle powinien być jej hostem.
+SPFx ma największy sens wtedy, gdy SharePoint pozostaje miejscem pracy użytkownika, ale standardowy interfejs platformy nie wystarcza.
 
-## 25. Najważniejsze zdania na slajd
+Najprostszy model decyzyjny:
+
+```text
+standardowa funkcja SharePoint
+        -> standardowy SharePoint
+
+aplikacja biznesowa
+        -> Power Apps
+
+workflow
+        -> Power Automate
+
+rozszerzenie UX SharePoint
+        -> SPFx
+
+duża niezależna aplikacja
+        -> custom web app
+```
+
+Najważniejsze rozróżnienie:
 
 > **Power Apps buduje aplikację. SPFx rozszerza SharePoint.**
 
+Jednocześnie:
+
 > **SPFx daje większą kontrolę nad UI, ale nie usuwa ograniczeń SharePoint jako backendu.**
 
-> **Jeśli problemem jest model danych, zmiana frontendu nie rozwiązuje problemu.**
-
-## 26. Połączenie z LAB 01 i LAB 05
-
-Po LAB 01:
-
-> Na tym etapie aplikacja jest prosta. Power Apps i SharePoint dobrze pasują do problemu.
-
-Następnie:
-
-> Gdyby wymaganiem był niestandardowy dashboard osadzony bezpośrednio w portalu SharePoint, moglibyśmy rozważyć SPFx.
-
-Przed LAB 05:
-
-> Nasz problem nie polega jednak na braku customowego UI. Problemem zaczyna być model danych, relacje, stan procesu i ALM. Dlatego nie rozwiązujemy go SPFx-em. Migrujemy model danych do Dataverse.
-
-To pokazuje różnicę pomiędzy problemem UI a problemem architektury danych.
+Jeżeli problemem jest model danych, zmiana frontendu nie rozwiązuje problemu.
