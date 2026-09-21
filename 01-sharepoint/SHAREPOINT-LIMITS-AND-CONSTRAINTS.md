@@ -1,34 +1,25 @@
 # SharePoint Online jako backend dla Power Apps i Power Automate
 
-## Cel materiału
+## Cel dokumentu
 
-Ten dokument opisuje ograniczenia i ryzyka SharePoint Online w kontekście budowania aplikacji Power Apps oraz automatyzacji Power Automate.
+Dokument opisuje najważniejsze ograniczenia SharePoint Online w kontekście używania list i bibliotek jako źródła danych dla Power Apps oraz Power Automate.
 
-Najważniejszy wniosek:
+SharePoint Online może przechowywać bardzo duże ilości danych, ale jego limity pojemnościowe nie są tym samym co limity operacyjne. W praktyce o jakości rozwiązania decydują jednocześnie:
 
-> SharePoint może przechowywać bardzo dużo danych. To nie znaczy, że każdy sposób pracy z tymi danymi będzie dobrze skalowalny.
-
-Nie należy sprowadzać tematu do zdania:
-
-> "SharePoint ma limit 5000 rekordów."
-
-To nieprawda.
-
-Trzeba rozdzielić:
-
-- pojemność listy lub biblioteki,
-- limity widoków i zapytań,
-- delegację Power Apps,
-- sposób pobierania danych przez Power Automate,
-- lookupy,
-- bezpieczeństwo,
+- liczba elementów,
+- sposób filtrowania,
+- indeksy,
+- delegacja Power Apps,
+- liczba lookupów,
+- model uprawnień,
+- sposób użycia Power Automate,
 - throttling,
-- model relacji,
-- architekturę procesu.
+- liczba równoległych procesów,
+- sposób modelowania relacji i stanu procesu.
 
 ---
 
-# 1. Najważniejsze liczby
+# 1. Najważniejsze limity
 
 | Obszar | Limit / rekomendacja | Znaczenie |
 |---|---:|---|
@@ -43,82 +34,73 @@ Trzeba rozdzielić:
 | Długość ścieżki | 400 znaków | pełna ścieżka pliku |
 | Major versions | 50 000 | liczba wersji głównych |
 | Minor versions | 511 | liczba wersji roboczych |
-| Zalecana skala synchronizacji | ok. 300 000 plików | soft limit OneDrive sync |
+| Zalecana skala synchronizacji | ok. 300 000 plików | rekomendacja wydajnościowa OneDrive Sync |
 | Cross-site move/copy | 30 000 plików / 100 GB | pojedyncza operacja |
 | Niedelegowalne rekordy Power Apps | 500 domyślnie / 2000 maks. | lokalny limit przetwarzania |
-| Get items w Power Automate | 100 domyślnie | trzeba świadomie ustawiać filtr/paginację |
+| Get items w Power Automate | 100 domyślnie | domyślna liczba zwracanych elementów |
 
 Dokumentacja:
 - SharePoint Online limits: https://learn.microsoft.com/en-us/office365/servicedescriptions/sharepoint-online-service-description/sharepoint-online-limits
 - Power Apps delegation: https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/delegation-overview
-- SharePoint connector and delegation: https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/connections/connection-sharepoint-online
+- SharePoint connector in Power Apps: https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/connections/connection-sharepoint-online
 - Power Automate Get items guidance: https://learn.microsoft.com/en-us/sharepoint/dev/business-apps/power-automate/guidance/working-with-get-items-and-get-files
 
 ---
 
-# 2. 30 milionów elementów nie oznacza "bez limitów"
+# 2. Pojemność listy a List View Threshold
 
-SharePoint Online może przechowywać do:
+SharePoint Online może przechowywać do 30 milionów elementów w liście lub 30 milionów plików i folderów w bibliotece.
 
-```text
-30 000 000 elementów w liście
-30 000 000 plików i folderów w bibliotece
-```
-
-To jest limit pojemności.
-
-Nie należy go mylić z:
-
-```text
-5 000 = List View Threshold
-```
-
-Lista z 100 000 rekordów może działać poprawnie.
-
-Problem pojawia się wtedy, gdy zapytanie próbuje przetwarzać zbyt duży zakres danych bez odpowiedniego filtrowania i indeksów.
-
----
-
-# 3. List View Threshold – 5000
+Nie oznacza to jednak, że każde zapytanie może operować swobodnie na całym zbiorze.
 
 List View Threshold wynosi:
 
 ```text
-5 000
+5 000 elementów
 ```
 
-To nie jest maksymalna liczba rekordów w liście.
+Jest to limit operacyjny dotyczący zapytań i widoków, a nie limit wielkości listy.
 
-To próg operacyjny związany z kosztownymi zapytaniami i widokami.
-
-Typowy problem:
+Przykład:
 
 ```text
-Contracts
-100 000 rekordów
+Lista: 100 000 rekordów
 
-widok / zapytanie
-bez indeksu
-bez selektywnego filtra
+Zapytanie:
+- filtr po indeksowanej kolumnie
+- wynik 300 rekordów
 ```
 
-Może prowadzić do błędów lub ograniczeń przetwarzania.
+może działać poprawnie.
 
-## Dobra praktyka
+Natomiast:
 
-Projektuj:
+```text
+Lista: 100 000 rekordów
 
-- indeksowane kolumny,
-- selektywne filtry,
-- widoki zwracające ograniczony zbiór danych.
+Zapytanie:
+- brak selektywnego filtra
+- sortowanie lub filtrowanie po niezindeksowanej kolumnie
+- skan dużej części listy
+```
+
+może prowadzić do problemów z List View Threshold.
 
 ---
 
-# 4. Indeksy
+# 3. Indeksy
 
-Indeksy powinny być projektowane zanim lista stanie się duża.
+Przy większych listach należy świadomie projektować indeksy.
 
-Dobre kandydaty w VCM:
+Dobre kandydaty to kolumny często używane do:
+
+- filtrowania,
+- sortowania,
+- ograniczania zakresu danych,
+- budowania widoków,
+- zapytań Power Automate.
+
+Przykład dla VCM:
 
 ```text
 Status
@@ -128,65 +110,53 @@ Contract Number
 Owner
 ```
 
-Nie indeksuj wszystkiego bez potrzeby.
-
-Pytanie projektowe:
-
-> Po jakich kolumnach aplikacja i flow najczęściej filtrują dane?
+Indeks powinien wynikać z rzeczywistych wzorców zapytań. Nie ma sensu indeksować wszystkich kolumn.
 
 ---
 
-# 5. Power Apps – delegacja
+# 4. Delegacja w Power Apps
 
-Power Apps próbuje wykonać zapytanie po stronie SharePoint.
+Power Apps próbuje delegować zapytania do źródła danych.
 
-Jeżeli zapytanie jest delegowalne:
+Przy zapytaniu delegowalnym:
 
 ```text
 Power Apps
    |
-Filter(...)
+   v
+SharePoint wykonuje filtr
    |
-SharePoint filtruje
-   |
-Power Apps dostaje wynik
+   v
+Power Apps pobiera wynik
 ```
 
-Jeżeli nie:
+Przy zapytaniu niedelegowalnym:
 
 ```text
 Power Apps
    |
-pobiera lokalny fragment
+   v
+pobiera ograniczony zbiór danych
    |
+   v
 filtruje lokalnie
 ```
 
-Domyślny limit niedelegowalnego przetwarzania:
-
-```text
-500 rekordów
-```
-
-Maksymalny konfigurowalny:
-
-```text
-2000 rekordów
-```
-
-To nie naprawia delegacji.
+Domyślny limit lokalnego przetwarzania wynosi 500 rekordów. Można go zwiększyć do 2000, ale nie zmienia to niedelegowalnego zapytania w delegowalne.
 
 ---
 
-# 6. Delegacja jest problemem poprawności, nie tylko wydajności
+# 5. Delegacja a poprawność wyników
+
+Problem delegacji dotyczy nie tylko wydajności.
 
 Przykład:
 
 ```text
-Lista = 100 000 rekordów
-Szukany Contract = rekord 35 000
-Zapytanie = niedelegowalne
-Limit lokalny = 500
+Lista: 100 000 rekordów
+Szukany rekord: pozycja 35 000
+Zapytanie: niedelegowalne
+Limit lokalny: 500
 ```
 
 Aplikacja może zwrócić:
@@ -197,60 +167,52 @@ Aplikacja może zwrócić:
 
 mimo że rekord istnieje.
 
-Najważniejsze zdanie:
-
-> Delegation warning może oznaczać błędny wynik, a nie tylko wolniejszą aplikację.
+Dlatego delegation warning może oznaczać niepełny lub błędny wynik.
 
 ---
 
-# 7. Nie wszystkie operacje Power Fx delegują do SharePoint
+# 6. Operacje niedelegowalne
 
-Delegowalność zależy od:
+Delegowalność zależy jednocześnie od:
 
-- źródła danych,
-- typu pola,
-- użytej funkcji,
-- operatora.
+- funkcji Power Fx,
+- operatora,
+- typu kolumny,
+- źródła danych.
 
-Szczególnej uwagi wymagają:
+Szczególnej uwagi wymagają m.in.:
 
 - `IsBlank`,
 - `UpdateIf`,
 - `RemoveIf`,
-- pola Person,
-- Lookup,
+- niektóre operacje na polach Person,
+- lookupy,
 - złożone warunki,
-- operacje na ID.
+- niektóre operacje na polu `ID`.
 
-Nie ucz uczestników reguły:
-
-> "Filter zawsze deleguje."
-
-Poprawna reguła:
-
-> Trzeba sprawdzić, czy konkretna formuła jest delegowalna dla konkretnego źródła.
+Nie należy zakładać, że sama funkcja `Filter()` jest zawsze delegowalna. Trzeba ocenić całe wyrażenie.
 
 ---
 
-# 8. SharePoint ID
+# 7. SharePoint ID
 
-Pole `ID` jest specjalnym polem systemowym.
+Pole `ID` jest polem systemowym i nie powinno być traktowane identycznie jak zwykła kolumna Number.
 
-Typowy bezpieczny przypadek:
+Typowy prosty filtr:
 
-```text
-ID = 123
+```powerfx
+Filter(Contracts, ID = 123)
 ```
 
-Nie zakładaj, że wszystkie operatory porównania działają tak samo jak na zwykłej kolumnie liczbowej.
+jest znacznie bezpieczniejszym przypadkiem niż budowanie złożonych zakresów i porównań po `ID`.
 
 ---
 
-# 9. Person / Group
+# 8. Pola Person / Group
 
-Person / Group jest strukturą złożoną.
+Person / Group jest typem złożonym.
 
-Może zawierać:
+Typowe właściwości:
 
 ```text
 DisplayName
@@ -260,22 +222,15 @@ Department
 JobTitle
 ```
 
-Nie wszystkie operacje na tych właściwościach delegują się jednakowo.
+Nie wszystkie operacje na tych właściwościach są delegowalne.
 
-W praktyce najlepiej jawnie wiedzieć, po czym filtrujemy:
-
-```text
-Email
-DisplayName
-```
-
-i sprawdzić delegację konkretnego wyrażenia.
+W zapytaniach należy jawnie określać właściwość, po której odbywa się porównanie, np. `Email` lub `DisplayName`, i weryfikować delegację konkretnego wyrażenia.
 
 ---
 
-# 10. Lookup columns
+# 9. Lookup columns
 
-Lookupi są wygodne, ale duża liczba lookupów komplikuje zapytania.
+Lookup jest wygodnym mechanizmem tworzenia zależności pomiędzy listami, ale duża liczba lookupów zwiększa złożoność zapytań.
 
 Przykład:
 
@@ -291,31 +246,29 @@ Contract
  -> Currency
 ```
 
-W takim momencie warto już zadać pytanie:
-
-> Czy SharePoint nadal jest właściwym modelem danych?
+Im więcej zależności, tym trudniej utrzymać rozwiązanie pod względem wydajności, delegacji i diagnostyki.
 
 ---
 
-# 11. Lookup threshold
+# 10. Lookup threshold
 
-SharePoint ma ograniczenia dotyczące liczby lookup/join operations w pojedynczym zapytaniu.
+SharePoint ma ograniczenia dotyczące liczby lookup/join operations w pojedynczym zapytaniu lub widoku.
 
-W praktyce często spotykana wartość:
+W praktyce często spotykanym progiem jest około:
 
 ```text
 12 lookup operations
 ```
 
-Do tego kosztu mogą dokładać się nie tylko klasyczne lookupy, ale również np. pola Person/Group.
+Do kosztu lookupów mogą być zaliczane także niektóre pola systemowe oraz Person / Group.
 
-Nie traktuj jednak liczby 12 jako celu projektowego.
-
-Jeśli rozwiązanie zbliża się do kilkunastu lookupów w jednym widoku lub zapytaniu, ważniejsze jest pytanie architektoniczne niż próba "zmieszczenia się w limicie".
+Nie należy jednak projektować rozwiązania "pod limit". Jeśli model wymaga kilkunastu lookupów w jednym widoku, warto ponownie ocenić model danych.
 
 ---
 
-# 12. Wielopoziomowe relacje
+# 11. Wielopoziomowe relacje
+
+Głębokie zależności zwiększają złożoność zapytań.
 
 Przykład:
 
@@ -329,40 +282,41 @@ Region
 Country
 ```
 
-SharePoint nie jest systemem, w którym warto bez ograniczeń budować głęboki graf relacji.
-
-Im więcej relacji i lookup expansion, tym większa złożoność zapytań oraz ryzyko problemów z delegacją.
+SharePoint nie jest dobrym zamiennikiem pełnego modelu relacyjnego w scenariuszach z dużą liczbą zależności i wielopoziomowych relacji.
 
 ---
 
-# 13. Choice nie jest zwykłym tekstem
+# 12. Choice
 
-Pole SharePoint Choice w Power Apps jest strukturą.
+Pole Choice nie jest zwykłym tekstem.
 
-Typowy dostęp:
+Typowy dostęp w Power Apps:
 
 ```powerfx
 Status.Value
 ```
 
-a nie:
+zamiast:
 
 ```powerfx
 Status
 ```
 
-To ma znaczenie przy:
+Ma to znaczenie dla:
 
-- filtrowaniu,
-- Patch,
-- porównaniach,
+- `Filter`,
+- `Patch`,
+- ComboBox,
+- porównań,
 - migracji do Dataverse.
 
 ---
 
-# 14. Lookup nie jest zwykłym tekstem
+# 13. Lookup w Power Apps
 
-Lookup może udostępniać m.in.:
+Lookup jest rekordem złożonym.
+
+Typowo dostępne są m.in.:
 
 ```text
 Id
@@ -372,71 +326,63 @@ Value
 Dlatego:
 
 ```powerfx
-Supplier.Value
+Supplier.Id
 ```
 
 i:
 
 ```powerfx
-Supplier.Id
+Supplier.Value
 ```
 
-to nie to samo.
+oznaczają różne rzeczy.
 
 ---
 
-# 15. Internal names kolumn
+# 14. Internal names kolumn
 
-Kolumna utworzona jako:
+SharePoint przechowuje wewnętrzne nazwy kolumn niezależnie od późniejszej zmiany Display Name.
+
+Przykład:
 
 ```text
+Display Name:
 Contract Number
-```
 
-może mieć internal name:
-
-```text
+Internal Name:
 Contract_x0020_Number
 ```
 
-Późniejsza zmiana Display Name nie musi zmienić internal name.
+Po zmianie Display Name internal name może pozostać bez zmian.
 
-To ma znaczenie szczególnie dla:
+Ma to znaczenie dla:
 
 - REST,
 - OData,
-- Power Automate Filter Query,
+- Filter Query,
 - integracji,
-- utrzymania solution.
+- utrzymania Power Automate.
 
 ---
 
-# 16. Power Automate – Get items
+# 15. Get items w Power Automate
 
-Domyślnie `Get items` zwraca ograniczoną liczbę elementów.
+Akcja `Get items` nie powinna być traktowana jako mechanizm do pobierania całej dużej listy.
 
-Typowa wartość domyślna:
+Domyślnie zwraca ograniczoną liczbę rekordów, typowo 100.
 
-```text
-100
-```
-
-Nie należy zakładać:
-
-> "Get items pobierze całą listę."
-
-Dla większych zestawów trzeba świadomie projektować:
+Przy większych zbiorach należy świadomie używać:
 
 - Filter Query,
 - Top Count,
 - Pagination,
-- indeksy.
+- indeksowanych kolumn.
 
 ---
 
-# 17. Anti-pattern: Get everything + Apply to each
+# 16. Anti-pattern: Get everything + Apply to each
 
-Źle:
+Nieefektywny wzorzec:
 
 ```text
 Get items
@@ -447,10 +393,10 @@ Apply to each
 ↓
 Condition
 ↓
-potrzebujemy 8 rekordów
+potrzebnych jest 8 rekordów
 ```
 
-Lepiej:
+Lepszy wariant:
 
 ```text
 Get items
@@ -458,11 +404,11 @@ Filter Query:
 Status eq 'Submitted'
 ```
 
-Filtruj przy źródle.
+Filtrowanie powinno odbywać się możliwie blisko źródła danych.
 
 ---
 
-# 18. Apply to each może zwielokrotnić liczbę operacji
+# 17. Apply to each i liczba operacji
 
 Przykład:
 
@@ -474,48 +420,36 @@ Apply to each
 Update item
 ```
 
-to około:
+oznacza około 3000 wywołań `Update item`, nie licząc pozostałych akcji.
 
-```text
-3000 Update item
-```
-
-plus pozostałe akcje.
-
-Funkcjonalnie może działać.
-
-Architektonicznie może bardzo źle skalować się wraz ze wzrostem danych i liczby flowów.
+Przy wielu równoległych flowach liczba operacji może bardzo szybko wzrosnąć.
 
 ---
 
-# 19. Throttling
+# 18. Throttling
 
-SharePoint Online i konektor SharePoint mają mechanizmy ochrony usługi.
+SharePoint Online i konektor SharePoint posiadają mechanizmy ochrony usługi.
 
-Objaw:
+Typowym objawem przekroczenia limitów jest:
 
 ```text
 HTTP 429
 Too Many Requests
 ```
 
-Źródłem może być:
+Do throttlingu mogą prowadzić:
 
-- wiele flowów,
-- wspólne connection,
-- tysiące akcji w pętli,
-- równoległe przetwarzanie,
-- intensywne odpytywanie list.
+- intensywne pętle,
+- wiele flowów używających tego samego connection,
+- masowe aktualizacje elementów,
+- częste odpytywanie dużych list,
+- nadmierna równoległość.
 
-Ważne:
-
-> Limit connectora może dotyczyć współdzielonego connection, nie tylko jednego flow.
-
-Dokładne wartości limitów mogą się zmieniać, dlatego przed szkoleniem warto sprawdzić aktualną dokumentację Microsoft.
+Limity connectorów i usługi mogą się zmieniać, dlatego ich dokładne wartości należy zawsze sprawdzać w aktualnej dokumentacji Microsoft.
 
 ---
 
-# 20. Trigger loops
+# 19. Trigger loops
 
 Klasyczny problem:
 
@@ -531,17 +465,19 @@ When item is modified
        ...
 ```
 
-Rozwiązania:
+Do ograniczenia takich sytuacji służą m.in.:
 
 - Trigger Conditions,
 - status guard,
 - techniczne flagi,
-- jasne ownership statusu,
-- świadome przejścia state machine.
+- jawne przejścia stanu,
+- przypisanie jednego właściciela modyfikacji statusu.
 
 ---
 
-# 21. Race conditions i lost updates
+# 20. Race conditions
+
+Jeżeli kilka flowów może modyfikować ten sam rekord, pojawia się ryzyko konkurencyjnych zapisów.
 
 Przykład:
 
@@ -553,19 +489,15 @@ Flow A zapisuje Status
 Flow B zapisuje Status
 ```
 
-Wynik zależy od kolejności zapisów.
+Jeden proces może nadpisać wynik drugiego.
 
-Jeżeli kilka flowów może zmieniać ten sam stan, projekt zaczyna być trudny do kontrolowania.
-
-Pytanie architektoniczne:
-
-> Kto jest właścicielem zmiany tego statusu?
+Dlatego stan biznesowy powinien mieć jasno określonego właściciela.
 
 ---
 
-# 22. Brak transakcyjności
+# 21. Brak klasycznej transakcyjności
 
-SharePoint + Power Automate nie daje klasycznego:
+SharePoint i Power Automate nie zapewniają klasycznej transakcji typu:
 
 ```text
 BEGIN TRAN
@@ -581,47 +513,51 @@ Create Approval   OK
 Update Supplier   FAIL
 ```
 
-Pierwsze operacje nie zostaną automatycznie cofnięte.
+Wcześniejsze operacje nie zostaną automatycznie cofnięte.
 
-Trzeba projektować:
+W takich procesach trzeba projektować:
 
-- recovery,
 - retry,
 - idempotency,
-- compensating action,
+- recovery,
+- compensating actions,
 - jawny stan procesu.
 
 ---
 
-# 23. SharePoint nie pilnuje pełnego state machine
+# 22. State machine
 
-Możemy mieć statusy:
+SharePoint pozwala przechowywać kolumnę `Status`, ale sam nie gwarantuje poprawnych przejść pomiędzy stanami.
+
+Przykład poprawnej sekwencji:
 
 ```text
 Draft
+  ↓
 Submitted
+  ↓
 In Approval
+  ↓
 Approved
+  ↓
 Integrated
 ```
 
-ale SharePoint sam w sobie nie gwarantuje:
-
-```text
-Draft -> Submitted -> In Approval -> Approved
-```
-
-Jeżeli aplikacja lub flow źle zapisze status, technicznie może powstać:
+Bez dodatkowej logiki możliwa może być także niepoprawna zmiana:
 
 ```text
 Draft -> Integrated
 ```
 
-Reguły procesu muszą być kontrolowane przez aplikację / automatyzację.
+Reguły state machine muszą być kontrolowane przez aplikację, flow lub inną warstwę logiki.
 
 ---
 
-# 24. Unique security scopes
+# 23. Unique security scopes
+
+SharePoint pozwala nadawać indywidualne uprawnienia elementom.
+
+Każdy unikalny zestaw uprawnień może tworzyć osobny security scope.
 
 Techniczny limit:
 
@@ -629,12 +565,7 @@ Techniczny limit:
 50 000 unique security scopes
 ```
 
-Rekomendacja projektowa:
-
-```text
-utrzymuj znacząco mniej,
-często jako punkt odniesienia < 5000
-```
+Przy dużych listach zalecana jest znacznie mniejsza liczba, często poniżej 5000.
 
 Anti-pattern:
 
@@ -645,40 +576,33 @@ Contract 3 -> unique permissions
 ...
 ```
 
-Przy tysiącach rekordów model bezpieczeństwa szybko staje się kosztowny.
+Przy tysiącach rekordów taki model staje się trudny do utrzymania i może wpływać na wydajność.
 
 ---
 
-# 25. 100 000 elementów a permission inheritance
+# 24. Dziedziczenie uprawnień i 100 000 elementów
 
-Przy bardzo dużych listach i bibliotekach pojawiają się dodatkowe ograniczenia operacji:
+Przy dużych listach, bibliotekach lub folderach powyżej około 100 000 elementów pojawiają się dodatkowe ograniczenia związane z operacjami:
 
 ```text
-break inheritance
-restore inheritance
+break permission inheritance
+restore permission inheritance
 ```
 
-na poziomie większych kontenerów.
-
-Warto o tym pamiętać szczególnie przy modelach, które próbują używać SharePoint jako systemu row-level security.
+Nie jest to limit wielkości listy, tylko ograniczenie operacyjne związane z modelem zabezpieczeń.
 
 ---
 
-# 26. Pliki i załączniki
+# 25. Pliki i załączniki
 
-Biblioteka dokumentów:
-
-```text
-pojedynczy plik do 250 GB
-```
-
-Załącznik do elementu listy:
+Biblioteka dokumentów obsługuje znacznie większe pliki niż załączniki elementów listy.
 
 ```text
-do 250 MB
+Pojedynczy plik w bibliotece: 250 GB
+Załącznik do elementu listy: 250 MB
 ```
 
-Jeżeli dokumenty są ważnym elementem domeny:
+Jeżeli dokumenty są ważną częścią domeny, lepszym modelem jest zwykle:
 
 ```text
 Document Library
@@ -688,19 +612,21 @@ metadata
 powiązanie biznesowe
 ```
 
-jest zwykle lepszym modelem niż duża liczba załączników listowych.
+zamiast przechowywania ich jako attachments elementów listy.
 
 ---
 
-# 27. Długość ścieżki
+# 26. Długość ścieżki
 
-Maksymalna pełna ścieżka:
+Pełna ścieżka pliku ma limit około:
 
 ```text
 400 znaków
 ```
 
-Głęboka hierarchia:
+Głęboka struktura folderów może więc stać się problemem.
+
+Przykład:
 
 ```text
 Customers
@@ -712,47 +638,41 @@ Customers
            /Contracts
 ```
 
-może stać się problemem.
-
-Dlatego w SharePoint często lepiej używać:
-
-```text
-metadata
-```
-
-zamiast próbować modelować wszystko folderami.
+W wielu scenariuszach lepszym rozwiązaniem jest używanie metadata zamiast bardzo głębokich struktur folderów.
 
 ---
 
-# 28. Versioning
+# 27. Wersjonowanie
 
-Limity mogą być bardzo wysokie, ale duża liczba wersji:
+SharePoint obsługuje bardzo dużą liczbę wersji, ale nie oznacza to, że każda biblioteka powinna przechowywać ich maksymalną liczbę.
 
-- zużywa storage,
-- komplikuje lifecycle dokumentu,
-- nie zawsze ma wartość biznesową.
+Duża liczba wersji:
 
-Polityka wersjonowania powinna być świadoma.
+- zwiększa zużycie storage,
+- komplikuje lifecycle dokumentów,
+- może nie mieć uzasadnienia biznesowego.
+
+Polityka wersjonowania powinna być jawnie zaprojektowana.
 
 ---
 
-# 29. Synchronizacja dużych bibliotek
+# 28. Synchronizacja dużych bibliotek
 
-Biblioteka może zawierać miliony dokumentów.
+Biblioteka może zawierać miliony plików, ale nie wszystkie powinny być synchronizowane na urządzenia użytkowników.
 
-To nie oznacza, że wszystkie powinny być synchronizowane przez OneDrive na komputer użytkownika.
-
-Dla najlepszej wydajności Microsoft rekomenduje znacznie mniejszą skalę synchronizacji, często około:
+Dla dobrej wydajności OneDrive zalecana skala synchronizacji jest znacznie mniejsza i często podawana w okolicach:
 
 ```text
 300 000 plików
 ```
 
+To rekomendacja wydajnościowa, nie twardy limit pojemności biblioteki.
+
 ---
 
-# 30. Szerokie listy
+# 29. Szerokie listy
 
-Problemy powoduje nie tylko liczba rekordów.
+Problemy mogą wynikać nie tylko z liczby rekordów, ale również z liczby kolumn.
 
 Przykład:
 
@@ -761,75 +681,67 @@ Contract
 100 kolumn
 ```
 
-Jeżeli aplikacja potrzebuje tylko:
+jeżeli aplikacja potrzebuje tylko kilku z nich.
 
-```text
-8 kolumn
-```
-
-warto ograniczać zakres danych i projektować model świadomie.
+Szeroki model zwiększa koszt transferu, renderowania i utrzymania.
 
 ---
 
-# 31. Złożone typy pól
+# 30. Złożone typy pól
 
 Szczególnej uwagi wymagają:
 
-```text
-Lookup
-Person
-Choice
-Managed Metadata
-Attachments
-Calculated columns
-```
+- Lookup,
+- Person,
+- Choice,
+- Managed Metadata,
+- Attachments,
+- Calculated Columns.
 
-Nie dlatego, że są złe.
+Mogą:
 
-Dlatego, że:
-
-- mają złożoną strukturę,
-- mogą mieć ograniczenia delegacji,
-- komplikują Power Fx i OData,
-- zwiększają koszt zapytań.
+- komplikować Power Fx,
+- mieć ograniczenia delegacji,
+- zwiększać koszt zapytań,
+- utrudniać OData i integracje.
 
 ---
 
-# 32. Rozproszona logika biznesowa
+# 31. Rozproszona logika biznesowa
 
-Typowa ewolucja:
+W rozwiązaniach SharePoint + Power Apps + Power Automate łatwo rozproszyć logikę biznesową pomiędzy:
 
 ```text
-Canvas OnSelect
-+
+Canvas App
 SharePoint validation
-+
-Flow A Condition
-+
+Flow A
 Flow B
-+
 Flow C
 ```
 
-Po pewnym czasie pojawia się pytanie:
+Przykładowy skutek:
 
-> Kto właściwie ustawia status Contract?
+```text
+kilka komponentów ustawia Contract.Status
+```
 
-To jest ważny sygnał architektoniczny.
+Po pewnym czasie trudno ustalić, który komponent jest właścicielem danego stanu.
+
+Dlatego warto jawnie definiować odpowiedzialności poszczególnych warstw.
 
 ---
 
-# 33. "Ukryta baza aplikacyjna"
+# 32. "Ukryty system aplikacyjny"
 
-Projekt może zacząć się od:
+Rozwiązanie może zacząć się od:
 
 ```text
 1 lista
-1 Power App
+1 aplikacja
 1 flow
 ```
 
-a po roku mieć:
+a z czasem urosnąć do:
 
 ```text
 30 list
@@ -839,93 +751,64 @@ dziesiątki lookupów
 setki reguł
 ```
 
-Technicznie nadal jest to SharePoint.
+Technicznie nadal jest to SharePoint, ale architektonicznie jest to już rozbudowany system aplikacyjny.
 
-Architektonicznie powstał duży system aplikacyjny bez jawnej warstwy domenowej.
-
----
-
-# 34. Kiedy SharePoint jest dobrym backendem
-
-Dobry kandydat:
-
-- prosta aplikacja,
-- mało relacji,
-- prosty model uprawnień,
-- umiarkowany wolumen,
-- niewielka liczba automatyzacji,
-- brak złożonego state machine,
-- dokumenty są ważną częścią rozwiązania.
-
-Przykłady:
-
-- rejestr wyposażenia,
-- prosta lista zgłoszeń,
-- mała ewidencja,
-- prosty workflow akceptacyjny,
-- rozwiązanie dokumentowe.
+W takim momencie warto ponownie ocenić, czy SharePoint nadal jest właściwym backendem.
 
 ---
 
-# 35. Kiedy rozważyć Dataverse
+# 33. Typowe anti-patterny Power Apps + SharePoint
 
-Sygnały:
-
-- dużo relacji,
-- dużo lookupów,
-- wiele ról,
-- granular security,
-- auditing,
-- rozbudowany state machine,
-- dużo automatyzacji,
-- integracje,
-- DEV / TEST / PROD,
-- ALM,
-- wiele aplikacji korzystających z tego samego modelu.
-
-Nie jeden sygnał sam w sobie.
-
-Raczej kombinacja wielu z nich.
-
----
-
-# 36. Power Apps + SharePoint – anti-patterny
-
-## 1. ClearCollect jako "naprawa" delegacji
+## ClearCollect jako obejście delegacji
 
 ```powerfx
 ClearCollect(colAll, BigList)
 ```
 
-## 2. Lookup w każdym wierszu galerii
+Nie naprawia delegacji. Przenosi problem do pamięci klienta.
+
+## Lookup w każdym wierszu galerii
 
 ```text
-Gallery 100 rows
+Gallery 100 records
 +
 100 LookUp()
 ```
 
-## 3. Jeden ogromny ekran i cała logika w OnSelect
+Może prowadzić do wzorca N+1.
 
-## 4. Dziesiątki lookupów
+## Ładowanie całej listy przy starcie
 
-## 5. Ładowanie całej listy w App.OnStart
+```text
+App.OnStart
+   |
+   v
+Load everything
+```
+
+pogarsza czas startu i skalowalność.
+
+## Gigantyczny ekran
+
+Duża liczba kontrolek, warunków `Visible` i logiki w `OnSelect` zwiększa sprzężenie aplikacji.
 
 ---
 
-# 37. Power Automate + SharePoint – anti-patterny
+# 34. Typowe anti-patterny Power Automate + SharePoint
 
-## 1.
+## Pobieranie wszystkiego
 
 ```text
-Get items ALL
+Get items
 ↓
 Apply to each
 ↓
 Condition
 ```
 
-## 2.
+zamiast filtrowania przy źródle.
+
+## Modyfikacja elementu obserwowanego przez trigger
 
 ```text
 When item modified
@@ -933,44 +816,90 @@ When item modified
 Update same item
 ```
 
-bez trigger guard.
+bez Trigger Conditions.
 
-## 3.
+## Masowe Update item
 
-Tysiące indywidualnych `Update item`.
+Tysiące indywidualnych wywołań zwiększają ryzyko throttlingu.
 
-## 4.
+## Wielu właścicieli statusu
 
-Kilka flowów zmieniających ten sam status.
+Kilka flowów modyfikujących ten sam stan bez koordynacji zwiększa ryzyko race conditions.
 
-## 5.
+## Retry każdego błędu
 
-Retry każdego błędu bez klasyfikacji.
-
----
-
-# 38. Dobre praktyki
-
-Jeżeli świadomie wybieramy SharePoint:
-
-1. Projektuj indeksy wcześnie.
-2. Filtruj po stronie źródła.
-3. Pilnuj delegation warnings.
-4. Nie używaj kolekcji jako obejścia delegacji.
-5. Minimalizuj liczbę lookupów.
-6. Minimalizuj unique permissions.
-7. Używaj Trigger Conditions.
-8. Nie pobieraj całych list bez potrzeby.
-9. Projektuj state machine.
-10. Monitoruj throttling.
-11. Ustal właściciela statusu.
-12. Testuj na realistycznym wolumenie danych.
-13. Używaj bibliotek dokumentów do dokumentów.
-14. Nie buduj całej taksonomii folderami.
+Retry powinien wynikać z klasy błędu i charakteru operacji.
 
 ---
 
-# 39. Pięć liczb, które warto pokazać uczestnikom
+# 35. Dobre praktyki
+
+Przy używaniu SharePoint jako backendu warto:
+
+1. Projektować indeksy przed znacznym wzrostem danych.
+2. Filtrować dane przy źródle.
+3. Pilnować delegation warnings.
+4. Nie używać kolekcji jako obejścia delegacji.
+5. Ograniczać liczbę lookupów.
+6. Ograniczać unique permissions.
+7. Używać Trigger Conditions.
+8. Unikać pełnych `Get items` bez potrzeby.
+9. Projektować jawny state machine.
+10. Monitorować throttling i HTTP 429.
+11. Ustalić właściciela zmian statusu.
+12. Testować aplikację na realistycznym wolumenie danych.
+13. Używać bibliotek dokumentów do dokumentów.
+14. Ograniczać głębokość struktur folderów.
+15. Rozdzielać stan biznesowy od stanu technicznego.
+
+---
+
+# 36. Kiedy SharePoint jest dobrym backendem
+
+SharePoint jest dobrym wyborem dla rozwiązań takich jak:
+
+- proste formularze,
+- niewielkie aplikacje CRUD,
+- ewidencje,
+- lekkie workflow,
+- rozwiązania dokumentowe,
+- aplikacje z niewielką liczbą relacji,
+- rozwiązania z prostym modelem bezpieczeństwa.
+
+Przykłady:
+
+```text
+rejestr wyposażenia
+prosta lista zgłoszeń
+ewidencja dokumentów
+mały workflow akceptacyjny
+rejestr umów o umiarkowanej złożoności
+```
+
+---
+
+# 37. Kiedy rozważyć Dataverse
+
+Dataverse warto rozważyć, gdy jednocześnie pojawia się kilka z poniższych cech:
+
+- duża liczba relacji,
+- wiele lookupów,
+- granularny model security,
+- wiele ról biznesowych,
+- auditing,
+- złożony state machine,
+- wiele automatyzacji,
+- integracje z systemami zewnętrznymi,
+- wiele aplikacji korzystających z tego samego modelu,
+- DEV / TEST / PROD,
+- wymagania ALM,
+- potrzeba jednoznacznego modelu domenowego.
+
+Decyzja nie powinna wynikać z jednego limitu, np. przekroczenia 5000 elementów.
+
+---
+
+# 38. Najważniejsze liczby do zapamiętania
 
 ```text
 30 000 000
@@ -980,154 +909,43 @@ Jeżeli świadomie wybieramy SharePoint:
 = List View Threshold
 
 500 / 2000
-= niedelegowalne rekordy Power Apps
+= lokalny limit niedelegowalnego Power Apps
 
 50 000
-= max unique security scopes
+= maksymalna liczba unique security scopes
 
 100
 = domyślna liczba wyników Get items
 ```
 
-Te wartości opisują różne warstwy systemu.
-
-Nie należy ich mieszać.
+Każda z tych wartości opisuje inną warstwę systemu.
 
 ---
 
-# 40. Pytanie kontrolne dla grupy
+# 39. Podsumowanie
 
-Zapytaj:
+SharePoint Online może być skutecznym backendem dla Power Apps i Power Automate, jeśli rozwiązanie jest projektowane z uwzględnieniem jego modelu danych i limitów operacyjnych.
 
-> Która z tych liczb mówi, ile rekordów może mieć aplikacja Power Apps?
+Najważniejsze rozróżnienie:
 
-Poprawna odpowiedź:
+> **Limit pojemności mówi, ile danych SharePoint może przechować. Limity operacyjne mówią, jak można z tymi danymi pracować.**
 
-> Żadna sama w sobie.
+SharePoint nie przestaje działać przy 5001 rekordach.
 
-Liczy się kombinacja:
+Problemy pojawiają się wtedy, gdy rosną jednocześnie:
 
 ```text
 wolumen
 +
-delegacja
+liczba relacji
 +
-indeksy
+złożoność security
 +
-filtry
+liczba flowów
 +
-lookupy
+liczba operacji
 +
-security
-+
-Power Automate
-+
-sposób użycia danych
+złożoność stanu biznesowego
 ```
 
----
-
-# 41. Jak wykorzystać to w VCM
-
-Po LAB 01:
-
-> Na pięciu Contracts wszystko działa idealnie.
-
-Potem:
-
-> A co przy 100 000 Contracts?
-
-> A co przy 15 lookupach?
-
-> A co przy osobnych permissions dla każdej umowy?
-
-> A co przy pięciu flowach zmieniających Status?
-
-> A co przy historii Approval?
-
-Nie mów:
-
-> SharePoint się do tego nie nadaje.
-
-Powiedz:
-
-> Wraz ze wzrostem wymagań koszt utrzymania modelu SharePoint zaczyna rosnąć.
-
-To naturalnie prowadzi do LAB 05 i Dataverse.
-
----
-
-# 42. Najważniejsze zdania na slajd
-
-> **SharePoint nie przestaje działać przy 5001 rekordach. Problem zaczyna się wtedy, gdy aplikacja zachowuje się tak, jakby danych było zawsze pięć.**
-
-> **Delegation warning nie zawsze oznacza wolniejszą aplikację. Czasami oznacza błędną odpowiedź.**
-
-> **Limit pojemności mówi, ile danych SharePoint może przechować. Limity operacyjne mówią, jak możesz z tymi danymi pracować.**
-
-> **Jeżeli coraz więcej energii poświęcamy na obchodzenie ograniczeń źródła zamiast na rozwój procesu biznesowego, warto ponownie ocenić wybór platformy.**
-
----
-
-# 43. Krótki talk track prowadzącego
-
-Po LAB 01 nie rób wykładu o wszystkich limitach.
-
-Pokaż tylko:
-
-```text
-30 mln != 5000
-```
-
-i powiedz:
-
-> SharePoint może mieć bardzo dużą listę. Problemem nie jest sama liczba rekordów, tylko sposób, w jaki później próbujemy je filtrować, łączyć i zabezpieczać.
-
-Po LAB 02 dodaj:
-
-```text
-500 / 2000
-```
-
-i wyjaśnij delegację.
-
-Po LAB 03 dodaj:
-
-```text
-trigger loop
-race conditions
-```
-
-Po LAB 11 wróć do:
-
-```text
-Get everything
-vs
-Filter at source
-```
-
-Wtedy ograniczenia SharePoint tworzą jedną historię zamiast jednego długiego wykładu.
-
----
-
-# 44. Wniosek architektoniczny
-
-Migracja VCM do Dataverse nie jest wykonywana dlatego, że:
-
-```text
-SharePoint przekroczył 5000 rekordów
-```
-
-Migrujemy dlatego, że rozwiązanie zaczyna wymagać:
-
-```text
-silniejszego modelu relacyjnego
-jawnego state machine
-auditingu
-lepszego modelu security
-procesowej obserwowalności
-ALM
-wspólnego modelu dla wielu aplikacji
-```
-
-To jest argument architektoniczny, a nie "ucieczka od limitu 5000".
+Jeżeli coraz więcej logiki i mechanizmów służy jedynie do obchodzenia ograniczeń źródła danych, warto ponownie ocenić wybór backendu.
