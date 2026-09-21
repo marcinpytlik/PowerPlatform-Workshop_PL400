@@ -35,3 +35,10 @@
 - indeksować kolumny używane w filtrach,
 - nie pobierać całych list bez Filter Query,
 - nie traktować lookupów SharePoint jako pełnego modelu relacyjnego.
+
+
+---
+
+## Ograniczenia SharePoint jako backendu aplikacji
+
+Przed LAB 05 warto przeczytać [SHAREPOINT-LIMITS-AND-CONSTRAINTS.md](SHAREPOINT-LIMITS-AND-CONSTRAINTS.md). Dokument zbiera limity list i bibliotek, delegację Power Apps, problemy z lookupami, security scopes, Get items, throttling, trigger loops oraz kryteria przejścia do Dataverse.
