@@ -242,38 +242,180 @@ Canvas App
 
 SharePoint pozostaje warstwą autoryzującą dostęp do danych.
 
-## 18. Kiedy pojawia się konto techniczne
+## 18. Konto techniczne nie zastępuje użytkownika przy bezpośrednim połączeniu Canvas App -> SharePoint
 
-Inaczej wygląda sytuacja, gdy aplikacja nie wykonuje operacji bezpośrednio na SharePoint, ale wywołuje Power Automate.
+To jest kluczowa różnica architektoniczna.
+
+Jeżeli Canvas App ma bezpośrednio dodane źródło danych SharePoint:
+
+```text
+Marcin
+   |
+   v
+Canvas App
+   |
+   v
+SharePoint connector
+   |
+   v
+Contracts
+```
+
+to operacje na liście są autoryzowane zgodnie z uprawnieniami Marcina.
+
+Nie ma w Canvas App ustawienia, w którym można wpisać konto:
+
+```text
+aplikacjaSharepoint@firma.pl
+```
+
+i sprawić, żeby każdy zalogowany użytkownik wykonywał bezpośrednie operacje SharePoint jako to konto.
+
+Nie należy też umieszczać loginu ani hasła konta technicznego w Power Fx.
+
+Jeżeli galeria korzysta z:
+
+```powerfx
+Gallery.Items = Contracts
+```
+
+to użytkownik aplikacji musi mieć wymagane uprawnienia do listy `Contracts`.
+
+Connection używane przez developera podczas budowania aplikacji nie jest mechanizmem impersonacji użytkowników końcowych.
+
+## 19. Kiedy konto techniczne ma zastosowanie
+
+Konto techniczne ma zastosowanie wtedy, gdy operacja na SharePoint jest wykonywana przez warstwę pośrednią, np. Power Automate.
 
 Przykład:
 
 ```text
+Marcin
+   |
+   v
 Canvas App
-    |
-    v
+   |
+   v
 Power Automate
-    |
-    v
-Connection Reference / technical identity
-    |
-    v
-SharePoint
+   |
+   v
+SharePoint connection
+konto: aplikacjaSharepoint
+   |
+   v
+Contracts
 ```
 
-W takim modelu flow może wykonywać operacje z wykorzystaniem connection konta technicznego.
+W takim modelu:
 
-Ma to sens dla kontrolowanych operacji backendowych, np.:
+1. użytkownik loguje się do Canvas App swoim kontem,
+2. aplikacja wywołuje flow,
+3. flow wykonuje akcje SharePoint przez skonfigurowane connection,
+4. connection może należeć do dedykowanej tożsamości technicznej.
+
+To rozdziela:
+
+```text
+tożsamość użytkownika aplikacji
+od
+tożsamości wykonującej operację backendową
+```
+
+Ma to sens dla kontrolowanych operacji technicznych, np.:
 
 - generowanie dokumentu,
 - integracja z API,
 - zapis technicznego statusu,
-- operacja wymagająca dodatkowych uprawnień,
-- centralny zapis logu.
+- centralny zapis logu,
+- operacja wymagająca dodatkowych uprawnień.
 
-Nie należy jednak używać konta technicznego jako prostego sposobu na obejście modelu uprawnień użytkowników.
+Nie należy jednak używać konta technicznego jako prostego sposobu na obejście całego modelu bezpieczeństwa SharePoint.
 
-Flow powinien sam kontrolować, czy użytkownik ma prawo wykonać daną operację.
+Jeżeli flow wykonuje operację w imieniu użytkownika, powinien sam sprawdzać, czy użytkownik ma prawo uruchomić daną operację.
+
+## 20. Jeżeli użytkownik nie ma mieć bezpośredniego dostępu do listy
+
+Jeżeli wymaganie brzmi:
+
+```text
+Użytkownik może korzystać z aplikacji,
+ale nie powinien mieć bezpośrednich uprawnień do listy SharePoint.
+```
+
+to aplikacja nie powinna korzystać z listy bezpośrednio.
+
+Zamiast:
+
+```text
+Canvas App
+   |
+   v
+SharePoint
+```
+
+należy zastosować np.:
+
+```text
+Canvas App
+   |
+   +--> Flow_GetContracts
+   +--> Flow_CreateContract
+   +--> Flow_UpdateContract
+   +--> Flow_DeleteContract
+              |
+              v
+       konto techniczne
+              |
+              v
+          SharePoint
+```
+
+W takim modelu galeria nie pracuje bezpośrednio na źródle `Contracts`, lecz np. na kolekcji zwróconej przez flow.
+
+Przykład koncepcyjny:
+
+```powerfx
+ClearCollect(
+    colContracts,
+    Flow_GetContracts.Run()
+)
+```
+
+a następnie:
+
+```powerfx
+Gallery.Items = colContracts
+```
+
+Taki model ma większy koszt implementacyjny i trzeba świadomie zaprojektować autoryzację po stronie flow.
+
+## 21. Zalecany model dla typowej aplikacji Canvas + SharePoint
+
+Dla typowej aplikacji biznesowej, w której użytkownik może bezpośrednio pracować z listami SharePoint:
+
+```text
+Entra ID / Microsoft 365 Group
+        |
+        +--> Share Canvas App
+        |
+        +--> SharePoint permissions
+```
+
+Przykład:
+
+```text
+VCM-App-Users
+    |
+    +--> Power Apps: User
+    |
+    +--> SharePoint Contracts: Contribute
+    |
+    +--> SharePoint Suppliers: Read
+```
+
+Dzięki temu użytkownik działa na SharePoint własną tożsamością, a dodanie nowej osoby sprowadza się do zarządzania członkostwem w grupie.
+
+Konto techniczne warto zostawić dla operacji backendowych wykonywanych przez flow, a nie dla zwykłego odczytu i edycji listy bezpośrednio przez Canvas App.
 
 ## 19. Zalecany model dla aplikacji Canvas + SharePoint
 
@@ -301,7 +443,7 @@ VCM-App-Users
 
 Dzięki temu dodanie nowego użytkownika oznacza zmianę członkostwa w jednej grupie zamiast ręcznej konfiguracji kilku zasobów.
 
-## 20. Przykład minimalnych uprawnień
+## 22. Przykład minimalnych uprawnień
 
 Załóżmy aplikację VCM korzystającą z:
 
@@ -324,7 +466,7 @@ Jeżeli zapis do ProcessLog wykonuje wyłącznie flow techniczny, użytkownik ap
 
 To jest przykład zastosowania zasady least privilege.
 
-## 21. Test bezpieczeństwa po udostępnieniu aplikacji
+## 23. Test bezpieczeństwa po udostępnieniu aplikacji
 
 Nie należy testować aplikacji wyłącznie na koncie developera lub właściciela witryny.
 
@@ -351,7 +493,7 @@ Należy sprawdzić:
 
 Test na koncie właściciela może ukryć problemy z bezpieczeństwem, ponieważ owner posiada znacznie szersze uprawnienia niż użytkownik końcowy.
 
-## 22. Anti-pattern
+## 24. Anti-pattern
 
 Niepoprawny model:
 
@@ -376,6 +518,16 @@ Problemy:
 Lepszy model:
 
 ```text
+Canvas App -> SharePoint
+    = użytkownik ma własne uprawnienia do listy
+
+Canvas App -> Power Automate -> SharePoint
+    = kontrolowana operacja backendowa może używać konta technicznego
+```
+
+oraz:
+
+```text
 Groups
 + least privilege
 + application sharing
@@ -383,3 +535,13 @@ Groups
 + technical identity tylko tam, gdzie jest potrzebne
 + Connection References dla flow w Solution
 ```
+
+## 25. Szybka macierz decyzyjna
+
+| Scenariusz | Czy użytkownik potrzebuje praw do listy? | Czy konto techniczne może wykonać operację? |
+|---|---:|---:|
+| Canvas App bezpośrednio czyta SharePoint | Tak | Nie zastępuje użytkownika |
+| Canvas App bezpośrednio zapisuje do SharePoint | Tak | Nie zastępuje użytkownika |
+| Canvas App wywołuje flow, a flow zapisuje do SharePoint | Nie zawsze | Tak |
+| Flow działa cyklicznie / event-driven | Nie dotyczy | Tak |
+| Użytkownik nie może mieć bezpośredniego dostępu do listy | Nie | Wymagana warstwa pośrednia |
