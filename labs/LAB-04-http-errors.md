@@ -152,6 +152,15 @@ PT30S
 
 Omów format ISO 8601 Duration.
 
+Przykłady:
+
+```text
+PT5S  = 5 sekund
+PT30S = 30 sekund
+PT2M  = 2 minuty
+PT1H  = 1 godzina
+```
+
 > W produkcji wartość dobieramy do kontraktu API. Nie ustawiamy losowo krótkiego timeout tylko dlatego, że „flow ma działać szybko”.
 
 ## Retry policy
@@ -180,9 +189,13 @@ Omów kompromis:
 security vs diagnosability
 ```
 
+`Secure inputs` i `Secure outputs` nie szyfrują „bardziej” samego transportu HTTP; ich podstawowym celem w tym kontekście jest ukrycie wrażliwych danych w historii runu. Na LAB pozostaw je wyłączone, dopóki diagnozujesz payload i response. W produkcji włącz je tam, gdzie request/response zawiera sekrety lub dane wrażliwe.
+
 ## Tracking
 
 Jeśli dostępne jest Tracking / Tracked properties:
+
+Tracked properties to **metadane diagnostyczne przypięte do runu/akcji**, a nie trwały biznesowy Process Log. Są przydatne do szybkiego filtrowania i korelacji w historii wykonań, ale nie zastępują tabeli `Process Log` budowanej później.
 
 Dodaj do tracked properties np.:
 
@@ -206,6 +219,49 @@ ContractId     = @{triggerBody()?['ID']}
 ```
 
 Jeżeli numer umowy jest zapisany w osobnej kolumnie `ContractNumber`, zamiast `Title` użyj jej wewnętrznej nazwy.
+
+---
+
+# Diagnostyka pierwszego requestu
+
+Jeżeli akcja HTTP zwraca `400 Bad Request`, a endpoint i tunnel działają, najpierw sprawdź rzeczywisty payload w Run History.
+
+Typowy błąd podczas budowania flow:
+
+```json
+{
+  "contractNumber": "",
+  "supplierCode": "",
+  "amount": 0,
+  "currency": "",
+  "correlationId": ""
+}
+```
+
+Taki request oznacza zwykle problem z dynamic content / expressions, a nie problem sieciowy.
+
+Kolejność diagnostyki:
+
+1. otwórz Inputs akcji `HTTP - Create Contract`,
+2. sprawdź finalne Body i Headers,
+3. potwierdź, że `contractNumber`, `supplierCode`, `amount` i `currency` mają wartości,
+4. jeżeli pola są puste, na chwilę podstaw stały poprawny JSON,
+5. uruchom test,
+6. po potwierdzeniu odpowiedzi 201 mapuj dynamiczne pola pojedynczo.
+
+Przykład stałego requestu diagnostycznego:
+
+```json
+{
+  "contractNumber": "VCM/LAB04/201",
+  "supplierCode": "SUP-001",
+  "amount": 50000,
+  "currency": "PLN",
+  "correlationId": "demo-001"
+}
+```
+
+Jeżeli ten request działa, transport i mock API są poprawne, a problem jest w mapowaniu danych we flow.
 
 ---
 
@@ -435,6 +491,10 @@ Talk track: retry classification, Failure Isolation. 409 i 500 nie mają tego sa
 ---
 
 # Najczęstsze błędy
+
+## HTTP zwraca 400, a tunnel działa
+
+Sprawdź finalny request w Run History. Najczęstszą przyczyną podczas LAB są puste wartości z dynamic content albo użycie niewłaściwej właściwości pola SharePoint. Nie zaczynaj od zmiany retry ani timeoutu – najpierw zweryfikuj body.
 
 ## HTTP nie jest dostępne
 
