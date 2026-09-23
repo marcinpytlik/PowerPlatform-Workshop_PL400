@@ -95,6 +95,12 @@ SortByColumns(
 ```
 
 > Jeśli kontrolka statusu zwraca `SelectedText.Value` albo inną właściwość, dopasuj formułę do typu kontrolki. Celem ćwiczenia jest zrozumienie filtra, nie zapamiętanie jednej wersji kontrolki.
+>
+> W nowych kontrolkach tekstowych Power Apps właściwość wpisanej wartości może być `.Value` zamiast `.Text`. Jeżeli filtr zwraca pustą galerię mimo poprawnych danych, sprawdź właściwość kontrolki `txtSearch`. Przykład dla modern Text Input:
+>
+> ```powerfx
+> IsBlank(txtSearch.Value) || StartsWith(Title, txtSearch.Value)
+> ```
 
 W galerii pokaż:
 
@@ -117,6 +123,16 @@ ThisItem.Supplier.Value
 ```powerfx
 Text(ThisItem.Amount, "#,##0.00") & " " & ThisItem.Currency.Value
 ```
+
+> Uwaga na nazwy kolumn SharePoint. `Title` jest nazwą wewnętrzną, ale w polskim interfejsie Power Apps pole może być prezentowane jako `Tytuł`. Jeżeli `ThisItem.Title` nie jest rozpoznawane, sprawdź podpowiedzi IntelliSense i użyj właściwości widocznej dla danego źródła, np. `ThisItem.Tytuł`.
+>
+> Kolumny wyświetlane w galerii są właściwościami kontrolek wewnątrz template galerii. Nie dodaje się ich jako kolejnych argumentów do `SortByColumns()`. Przykładowo trzy etykiety mogą mieć odpowiednio:
+>
+> ```powerfx
+> ThisItem.Tytuł
+> ThisItem.Supplier.Value
+> ThisItem.Status.Value
+> ```
 
 ---
 
@@ -194,7 +210,7 @@ Navigate(scrContractEdit, ScreenTransition.Cover)
 
 Dodaj button `btnSaveContract`.
 
-Przykładowa walidacja:
+Przykładowa walidacja dla klasycznych kontrolek:
 
 ```powerfx
 If(
@@ -210,7 +226,29 @@ If(
 )
 ```
 
-Nazwy `DataCardValue_*` dostosuj do kontrolek utworzonych w Twojej aplikacji.
+Dla modern controls Text Input często używa `.Value`, a nie `.Text`. Przykład:
+
+```powerfx
+If(
+    IsBlank(Trim(DataCardValue_ContractNumber.Value)),
+    Notify("Podaj numer umowy", NotificationType.Error),
+    IsBlank(DataCardValue_Supplier.Selected.Value),
+    Notify("Wybierz dostawcę", NotificationType.Error),
+    IsBlank(DataCardValue_Amount.Value) || Value(DataCardValue_Amount.Value) <= 0,
+    Notify("Kwota musi być większa od 0", NotificationType.Error),
+    SubmitForm(frmContract)
+)
+```
+
+Nazwy `DataCardValue_*` i właściwości kontrolek dostosuj do kontrolek utworzonych w Twojej aplikacji.
+
+Jeżeli formularz ma poprawnie skonfigurowane pola Required, można też wykorzystać:
+
+```powerfx
+frmContract.Valid
+```
+
+jako część walidacji, zamiast ręcznie powielać wszystkie reguły wymaganych pól.
 
 ## OnSuccess formularza
 
