@@ -165,3 +165,96 @@ Nie wystarcza jako jedyne źródło diagnostyki dla procesu rozłożonego na kil
 
 - https://learn.microsoft.com/en-us/sharepoint/dev/business-apps/power-automate/sharepoint-connector-actions-triggers
 - https://learn.microsoft.com/en-us/sharepoint/dev/business-apps/power-automate/guidance/working-with-get-items-and-get-files
+
+
+## 17. Partial update elementu SharePoint przez HTTP
+
+Standardowa akcja `Update item` w Power Automate może wymagać uzupełnienia wielu pól oznaczonych w SharePoint jako wymagane. Jeżeli celem jest zmiana tylko jednej lub kilku kolumn istniejącego elementu, można użyć akcji:
+
+```text
+SharePoint -> Send an HTTP request to SharePoint
+```
+
+Przykład: zmiana wyłącznie kolumny `Status` na `In Approval`.
+
+### Konfiguracja akcji
+
+Method:
+
+```text
+POST
+```
+
+Uri:
+
+```text
+_api/web/lists/GetByTitle('Contracts')/items(<ID>)
+```
+
+Przykład z dynamicznym ID:
+
+```text
+_api/web/lists/GetByTitle('Contracts')/items(@{triggerBody()?['ID']})
+```
+
+Headers:
+
+```text
+Accept: application/json;odata=nometadata
+Content-Type: application/json;odata=nometadata
+IF-MATCH: *
+X-HTTP-Method: MERGE
+```
+
+Body:
+
+```json
+{
+  "Status": "In Approval"
+}
+```
+
+Efekt:
+
+```text
+Title        -> bez zmian
+Supplier     -> bez zmian
+Amount       -> bez zmian
+ValidFrom    -> bez zmian
+ValidTo      -> bez zmian
+Status       -> In Approval
+```
+
+Jest to odpowiednik aktualizacji tylko wskazanej kolumny, np. koncepcyjnie:
+
+```sql
+UPDATE Contracts
+SET Status = 'In Approval'
+WHERE ID = <ID>;
+```
+
+### Ważne uwagi
+
+- używana jest wewnętrzna nazwa kolumny SharePoint,
+- dla kolumn prostych body może zawierać tylko zmieniane pola,
+- Lookup, Person, Managed Metadata i niektóre typy złożone wymagają właściwego formatu REST,
+- `IF-MATCH: *` oznacza aktualizację bez sprawdzania konkretnej wersji ETag,
+- jeśli ważna jest kontrola współbieżności, należy użyć rzeczywistego ETag zamiast `*`,
+- partial update nie powoduje ponownego zastosowania wartości domyślnych do pozostałych pól,
+- operacja nadal może uruchomić flow reagujące na modyfikację tego elementu.
+
+### Kiedy użyć
+
+`Update item` jest czytelniejsze dla prostych scenariuszy i powinno być pierwszym wyborem, gdy mapowanie pól nie jest problemem.
+
+`Send an HTTP request to SharePoint` jest przydatne, gdy:
+
+- lista ma wiele wymaganych pól,
+- trzeba zmienić tylko niewielką część rekordu,
+- nie chcemy przepisywać wartości wszystkich wymaganych kolumn,
+- potrzebna jest większa kontrola nad requestem REST.
+
+## 18. Dokumentacja HTTP SharePoint
+
+- https://learn.microsoft.com/en-us/sharepoint/dev/business-apps/power-automate/guidance/working-with-send-sp-http-request
+- https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/complete-basic-operations-using-sharepoint-rest-endpoints
