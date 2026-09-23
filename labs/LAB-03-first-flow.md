@@ -168,6 +168,8 @@ Body:
 
 Na tym etapie LAB użyj `Update item`, a wariant partial update potraktuj jako rozszerzenie.
 
+> Nie myl `SharePoint -> Send an HTTP request to SharePoint` z ogólną akcją `HTTP` używaną w LAB 04. To akcja konektora SharePoint do wywoływania SharePoint REST API; ogólna akcja HTTP ma inny model licencyjny i zastosowanie.
+
 > To Update ponownie spełni trigger „created or modified”. Drugi run powinien zakończyć się, ponieważ Status nie jest już `Submitted`. W LAB 10 wykorzystamy tę sytuację do diagnostyki.
 
 ---
