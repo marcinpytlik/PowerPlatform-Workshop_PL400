@@ -406,3 +406,173 @@ Flow powinien sprawdzić:
 ## 20. Dokumentacja Power Apps -> Power Automate
 
 - https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/how-to/trigger-flow
+
+
+## 21. Retry Policy w akcji HTTP – konfiguracja krok po kroku
+
+Retry Policy służy do ponawiania akcji po błędach przejściowych, takich jak chwilowa niedostępność usługi, timeout lub throttling.
+
+Microsoft zaleca stosowanie retry dla błędów transient, a nie dla błędów biznesowych.
+
+### Gdzie ustawić Retry Policy
+
+1. Otwórz flow w Power Automate.
+2. Zaznacz akcję `HTTP`.
+3. Otwórz panel `Settings`.
+4. Znajdź sekcję `Retry Policy`.
+5. Wybierz odpowiedni typ polityki.
+
+Dostępne typy zależą od akcji, ale typowo są to:
+
+```text
+Default
+None
+Fixed Interval
+Exponential Interval
+```
+
+### Default
+
+Jeżeli nie ustawisz własnej polityki, akcja korzysta z polityki domyślnej connectora/runtime.
+
+Domyślna polityka dla wielu operacji ma charakter exponential retry.
+
+Nie należy zakładać konkretnego interwału bez sprawdzenia aktualnej dokumentacji i zachowania konkretnej akcji.
+
+### None
+
+```text
+Retry Policy = None
+```
+
+oznacza brak automatycznego ponawiania.
+
+Używaj, gdy ponowienie nie ma sensu albo może spowodować niepożądane skutki.
+
+Przykłady:
+
+- 400 Bad Request,
+- 409 Conflict wynikający z reguły biznesowej,
+- błąd walidacji,
+- operacja nieidempotentna, której nie wolno powtórzyć bez dodatkowej kontroli.
+
+### Fixed Interval
+
+Przykład:
+
+```text
+Retry Policy: Fixed Interval
+Count: 3
+Interval: PT10S
+```
+
+oznacza maksymalnie trzy ponowienia co 10 sekund.
+
+Format czasu używa ISO 8601 Duration:
+
+```text
+PT5S  = 5 sekund
+PT30S = 30 sekund
+PT2M  = 2 minuty
+```
+
+Fixed Interval jest prosty i przewidywalny, ale przy dużej liczbie klientów może generować zsynchronizowane ponowienia.
+
+### Exponential Interval
+
+Exponential retry zwiększa odstęp między kolejnymi próbami i jest preferowany dla wielu błędów przejściowych.
+
+Przykład konfiguracyjny:
+
+```text
+Retry Policy: Exponential Interval
+Count: 3
+Minimum interval: PT5S
+Maximum interval: PT30S
+```
+
+Dokładne pola widoczne w designerze mogą zależeć od akcji i wersji interfejsu.
+
+### Dobór retry do kodu HTTP
+
+Praktyczna zasada:
+
+| HTTP | Typ błędu | Retry |
+|---|---|---|
+| 200/201/204 | sukces | nie |
+| 400 | request niepoprawny | nie |
+| 401/403 | auth/permissions | zwykle nie |
+| 404 | brak zasobu | zwykle nie |
+| 409 | konflikt biznesowy / duplikat | zwykle nie |
+| 408 | timeout | często tak |
+| 429 | throttling | tak |
+| 500 | błąd serwera | zależnie od operacji |
+| 502/503/504 | błąd przejściowy infrastruktury | często tak |
+
+### Retry i idempotencja
+
+Retry jest bezpieczne tylko wtedy, gdy ponowienie tej samej operacji nie powoduje niekontrolowanych skutków ubocznych.
+
+Przykład ryzyka:
+
+```text
+POST create contract
+-> timeout
+-> klient nie wie, czy rekord został utworzony
+-> retry
+-> możliwy duplikat
+```
+
+Dlatego dla operacji tworzących dane należy stosować:
+
+- business key,
+- idempotency key,
+- correlation ID,
+- kontrolę duplikatów,
+- właściwą interpretację 409.
+
+### Przykład dla VCM Mock API
+
+```text
+VCM/LAB04/201 -> bez retry
+VCM/LAB04/409 -> None
+VCM/LAB04/429 -> Exponential Interval
+VCM/LAB04/500 -> test obu wariantów
+VCM/LAB04/SLOW -> retry zależnie od celu ćwiczenia
+```
+
+Dla demonstracji throttlingu można ustawić:
+
+```text
+Retry Policy: Exponential Interval
+Count: 3
+Minimum interval: PT5S
+Maximum interval: PT30S
+```
+
+Następnie w Run History sprawdzić:
+
+- liczbę prób,
+- czas pomiędzy próbami,
+- status końcowy,
+- correlation ID,
+- tracked properties.
+
+### Retry Policy nie zastępuje error handling
+
+Nawet poprawnie ustawiony retry nie zwalnia z obsługi końcowego błędu.
+
+Typowy wzorzec:
+
+```text
+HTTP
+  |
+  +--> sukces -> dalszy proces
+  |
+  +--> po wyczerpaniu retry -> CATCH / log / status Integration Error
+```
+
+### Dokumentacja
+
+- https://learn.microsoft.com/en-us/power-automate/guidance/coding-guidelines/error-handling
+- https://learn.microsoft.com/en-us/azure/logic-apps/error-exception-handling
