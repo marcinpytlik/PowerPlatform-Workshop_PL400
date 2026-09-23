@@ -164,7 +164,43 @@ Sprawdź:
 - External System ID,
 - Correlation ID.
 
-W `OnSuccess` nie używaj już `LastSubmit.Title`. Odczytaj primary name tabeli Contract.
+W `OnSuccess` nie używaj już `LastSubmit.Title`. Po przepięciu formularza na Dataverse primary name tabeli Contract to `Contract Number`.
+
+Dla naszego modelu ustaw np.:
+
+```powerfx
+Notify(
+    "Umowa została zapisana",
+    NotificationType.Success
+);
+
+Trace(
+    "Contract saved",
+    TraceSeverity.Information,
+    {
+        ContractNumber: frmContract.LastSubmit.'Contract Number'
+    }
+);
+
+Navigate(
+    scrContracts,
+    ScreenTransition.Fade
+)
+```
+
+Jeżeli Power Apps podkreśla:
+
+```powerfx
+frmContract.LastSubmit.Title
+```
+
+to jest to pozostałość po modelu SharePoint z LAB 02. Po migracji do Dataverse należy odwoływać się do kolumny Dataverse:
+
+```powerfx
+frmContract.LastSubmit.'Contract Number'
+```
+
+Apostrofy są wymagane, ponieważ display name kolumny zawiera spację. Jeżeli w aplikacji używasz innej nazwy wyświetlanej, wybierz właściwość rekordu podpowiadaną przez IntelliSense.
 
 ---
 
