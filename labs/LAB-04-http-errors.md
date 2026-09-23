@@ -184,14 +184,28 @@ security vs diagnosability
 
 Jeśli dostępne jest Tracking / Tracked properties:
 
-Dodaj do tracked properties:
+Dodaj do tracked properties np.:
 
 ```text
 ContractNumber
-CorrelationId
+ContractId
+Status
 ```
 
-Wartości wybierz z dynamic content/expressions.
+Wartości wybierz z triggera albo z inputs/outputs **tej samej akcji**.
+
+> Ważne ograniczenie: tracked properties akcji nie mogą odwoływać się dowolnie do outputów wcześniejszych akcji. W praktyce odwołanie typu `outputs('Compose_-_Correlation_ID')` użyte bezpośrednio w Tracking akcji HTTP może zakończyć zapis flow błędem `InvalidTemplate`. Tracked properties mogą korzystać z własnych inputs/outputs akcji, trigger inputs/outputs oraz parameters.
+>
+> Dlatego `CorrelationId` wygenerowany w osobnym Compose nadal wysyłamy w nagłówku `x-correlation-id`, ale w Tracking najlepiej użyć wartości dostępnej z triggera albo zapisać Correlation ID wcześniej w danych procesu.
+
+Przykładowe expressions:
+
+```text
+ContractNumber = @{triggerBody()?['Title']}
+ContractId     = @{triggerBody()?['ID']}
+```
+
+Jeżeli numer umowy jest zapisany w osobnej kolumnie `ContractNumber`, zamiast `Title` użyj jej wewnętrznej nazwy.
 
 ---
 
@@ -199,11 +213,41 @@ Wartości wybierz z dynamic content/expressions.
 
 Uruchom mock API w trybie `success` albo użyj numeru umowy bez `409` / `429` / `500` w nazwie.
 
+Linux/macOS / Git Bash:
+
 ```bash
 curl -s -X PUT "$API/admin/mode" \
   -H 'Content-Type: application/json' \
   -d '{"mode":"success"}'
 ```
+
+PowerShell:
+
+```powershell
+$API = "https://<twoj-adres>.trycloudflare.com"
+
+Invoke-RestMethod `
+    -Method Put `
+    -Uri "$API/admin/mode" `
+    -ContentType "application/json" `
+    -Body '{"mode":"success"}'
+```
+
+Sprawdzenie bieżącego trybu:
+
+```powershell
+Invoke-RestMethod "$API/admin/mode"
+```
+
+Reset pamięci mock API przed ponownym testem:
+
+```powershell
+Invoke-RestMethod `
+    -Method Delete `
+    -Uri "$API/api/contracts"
+```
+
+> Na wspólnym warsztacie bezpieczniej używać numerów `VCM/LAB04/201`, `409`, `429`, `500` niż globalnego `/admin/mode`. Zmiana globalnego trybu wpływa na wszystkich uczestników korzystających z tej samej instancji mock API.
 
 Przykładowa odpowiedź:
 
