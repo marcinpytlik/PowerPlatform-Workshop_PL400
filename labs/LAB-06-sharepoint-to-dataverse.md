@@ -263,6 +263,79 @@ Dotyczy to przede wszystkim:
 
 Przy lookupach używaj identyfikatorów rekordów Dataverse, a nie nazw tekstowych.
 
+## Row ID w `Update a row`
+
+Akcja Dataverse `Update a row` wymaga w polu `Row ID` **GUID-u rekordu**, a nie wartości biznesowej takiej jak `Contract Number`.
+
+Dla tabeli `ContractMTS` wybierz z dynamic content triggera pole będące unikalnym identyfikatorem encji. W bieżącym środowisku jest ono widoczne jako:
+
+```text
+ContractMT
+Unique identifier for entity instances
+```
+
+Schemat:
+
+```text
+When a row is added, modified or deleted
+        |
+        +--> Contract Number = VCM/2026/003
+        |
+        +--> ContractMT = <GUID>
+```
+
+Do `Update a row -> Row ID` wybierz:
+
+```text
+ContractMT
+```
+
+Nie wybieraj:
+
+```text
+Contract Number
+VCM/2026/003
+```
+
+Przykładowy poprawny Row ID wygląda jak:
+
+```text
+8d5e4e91-4c2b-f111-8a69-000d3a123456
+```
+
+Jeżeli do `Row ID` trafi `VCM/2026/003`, Dataverse może zwrócić:
+
+```text
+400
+0x80060888
+ODataUnrecognizedPathException
+URL was not parsed due to an ODataUnrecognizedPathException
+```
+
+To nie jest błąd filtra OData triggera, tylko niepoprawny identyfikator rekordu użyty przez `Update a row`.
+
+Praktyczna diagnostyka:
+
+1. otwórz run triggera,
+2. przejrzyj dynamic content lub raw outputs,
+3. znajdź pole opisane jako `Unique identifier for entity instances`,
+4. użyj tej wartości jako `Row ID`,
+5. `Contract Number` pozostaw jako zwykłe pole biznesowe.
+
+Koncepcyjnie jest to odpowiednik:
+
+```sql
+UPDATE Contract
+SET Status = 'In Approval'
+WHERE ContractId = '<GUID>';
+```
+
+a nie:
+
+```sql
+WHERE ContractNumber = 'VCM/2026/003';
+```
+
 ---
 
 # Zadanie 9 – Status i Correlation ID
