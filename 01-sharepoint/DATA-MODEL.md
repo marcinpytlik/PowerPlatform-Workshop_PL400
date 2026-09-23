@@ -61,3 +61,24 @@ Zobacz [WHEN-TO-USE-SPFX-WEBPART.md](WHEN-TO-USE-SPFX-WEBPART.md). Materiał pok
 - [SHAREPOINT-DOCUMENTS-AND-ATTACHMENTS.md](SHAREPOINT-DOCUMENTS-AND-ATTACHMENTS.md) – attachments, biblioteki dokumentów, metadata i versioning.
 - [POWERAPPS-ERROR-HANDLING.md](POWERAPPS-ERROR-HANDLING.md) – IfError, Errors, Patch, walidacja i obsługa błędów.
 - [POWERAPPS-SHAREPOINT-DIAGNOSTICS.md](POWERAPPS-SHAREPOINT-DIAGNOSTICS.md) – App Checker, Live Monitor, Run History, Version History i correlation ID.
+
+
+## Przewodnik developerski – Canvas App + SharePoint Online
+
+Pełny indeks technicznych notatek dla developerów znajduje się w:
+
+[POWERAPPS-SHAREPOINT-DEVELOPER-GUIDE.md](POWERAPPS-SHAREPOINT-DEVELOPER-GUIDE.md)
+
+Nowe materiały:
+
+- [POWERAPPS-SHAREPOINT-FIELD-TYPES.md](POWERAPPS-SHAREPOINT-FIELD-TYPES.md) – typy kolumn SharePoint i reprezentacja w Power Fx.
+- [POWERAPPS-SHAREPOINT-DATA-ACCESS-PATTERNS.md](POWERAPPS-SHAREPOINT-DATA-ACCESS-PATTERNS.md) – Filter, LookUp, Patch, SubmitForm, kolekcje, With, Concurrent i Refresh.
+- [POWERAPPS-STATE-AND-VARIABLES.md](POWERAPPS-STATE-AND-VARIABLES.md) – Set, UpdateContext, With, kolekcje, Named formulas i App.OnStart.
+- [POWERAPPS-COMPONENTS-AND-REUSE.md](POWERAPPS-COMPONENTS-AND-REUSE.md) – komponenty, reuse i granice odpowiedzialności UI.
+- [POWERAPPS-RESPONSIVE-AND-ACCESSIBILITY.md](POWERAPPS-RESPONSIVE-AND-ACCESSIBILITY.md) – kontenery, responsive layout, klawiatura i accessibility.
+- [POWERAPPS-TESTING-AND-RELEASE.md](POWERAPPS-TESTING-AND-RELEASE.md) – App Checker, Live Monitor, security tests, publish i regression checklist.
+- [POWERAPPS-SHAREPOINT-CONCURRENCY.md](POWERAPPS-SHAREPOINT-CONCURRENCY.md) – lost update, ETag, optimistic concurrency i race conditions.
+- [POWERAPPS-SHAREPOINT-ALM.md](POWERAPPS-SHAREPOINT-ALM.md) – DEV/TEST/PROD, Solutions, Connection References, Environment Variables i deployment.
+- [POWERAPPS-NAMING-CONVENTIONS.md](POWERAPPS-NAMING-CONVENTIONS.md) – spójne nazwy kontrolek, zmiennych, ekranów i flow.
+- [POWERAPPS-CODE-QUALITY.md](POWERAPPS-CODE-QUALITY.md) – czytelny Power Fx, IfError, With, guard clauses i review checklist.
+- [WHEN-SHAREPOINT-STOPS-BEING-A-GOOD-BACKEND.md](WHEN-SHAREPOINT-STOPS-BEING-A-GOOD-BACKEND.md) – sygnały architektoniczne do przejścia na Dataverse, SQL lub API.
