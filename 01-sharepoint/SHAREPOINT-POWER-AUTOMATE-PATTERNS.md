@@ -258,3 +258,151 @@ WHERE ID = <ID>;
 
 - https://learn.microsoft.com/en-us/sharepoint/dev/business-apps/power-automate/guidance/working-with-send-sp-http-request
 - https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/complete-basic-operations-using-sharepoint-rest-endpoints
+
+
+## 19. Bezpośrednie uruchamianie flow z Canvas App
+
+Jeżeli użytkownik zapisuje rekord w Canvas App i proces biznesowy ma rozpocząć się od razu, można uruchomić flow bezpośrednio z aplikacji zamiast czekać na trigger SharePoint.
+
+Nie używa się wtedy triggera:
+
+```text
+Manually trigger a flow
+```
+
+tylko triggera:
+
+```text
+Power Apps (V2)
+```
+
+Jest to nadal flow typu instant cloud flow, ale jego wywołującym jest Canvas App.
+
+Schemat:
+
+```text
+Canvas App
+    |
+    | Flow.Run(...)
+    v
+Power Automate
+    |
+    +--> walidacja
+    +--> Get item / Update item
+    +--> Approval
+    +--> HTTP / API
+```
+
+### Przykład
+
+Flow ma trigger `Power Apps (V2)` i parametr wejściowy:
+
+```text
+ContractId - Number
+```
+
+Po dodaniu flow do aplikacji można go wywołać z Power Fx:
+
+```powerfx
+VCM_SubmitContract.Run(
+    ThisItem.ID
+)
+```
+
+Jeżeli aplikacja najpierw zapisuje dane do SharePoint:
+
+```powerfx
+Patch(
+    Contracts,
+    ThisItem,
+    {
+        Status: { Value: "Submitted" }
+    }
+);
+
+VCM_SubmitContract.Run(
+    ThisItem.ID
+)
+```
+
+Alternatywnie flow może być właścicielem zmiany statusu:
+
+```powerfx
+VCM_SubmitContract.Run(
+    ThisItem.ID
+)
+```
+
+a po stronie Power Automate:
+
+```text
+Power Apps (V2)
+    |
+    v
+Get item
+    |
+    v
+sprawdzenie aktualnego stanu
+    |
+    v
+Update Status = Submitted / In Approval
+    |
+    v
+dalszy proces
+```
+
+Drugi wariant zmniejsza zależność od tego, czy SharePoint zdążył uruchomić trigger zdarzeniowy.
+
+### Porównanie
+
+```text
+Canvas App -> SharePoint update -> SharePoint trigger
+```
+
+zalety:
+
+- luźniejsze powiązanie aplikacji z flow,
+- proces może reagować również na zmiany wykonane poza aplikacją.
+
+wady:
+
+- start flow nie jest bezpośrednio kontrolowany przez aplikację,
+- może wystąpić opóźnienie pomiędzy zmianą listy a rozpoczęciem runu.
+
+```text
+Canvas App -> Flow.Run(...)
+```
+
+zalety:
+
+- wywołanie flow następuje bezpośrednio po akcji użytkownika,
+- aplikacja może przekazać parametry,
+- prostsze sterowanie komendami typu Submit / Retry / Cancel.
+
+wady:
+
+- Canvas App jest zależna od konkretnego flow,
+- flow musi walidować parametry przekazane przez klienta.
+
+### Bezpieczeństwo
+
+Parametr przekazany z Canvas App nie powinien być traktowany jako dowód uprawnienia.
+
+Przykład:
+
+```text
+action = APPROVE
+```
+
+nie powinno samo w sobie oznaczać, że użytkownik ma prawo zatwierdzić kontrakt.
+
+Flow powinien sprawdzić:
+
+- użytkownika wywołującego,
+- bieżący status rekordu,
+- wymagane role lub reguły biznesowe,
+- czy przejście stanu jest dozwolone.
+
+## 20. Dokumentacja Power Apps -> Power Automate
+
+- https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/how-to/trigger-flow
