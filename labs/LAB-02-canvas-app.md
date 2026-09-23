@@ -51,6 +51,42 @@ Ukończony LAB 01.
 
 Sprawdź, czy wszystkie trzy źródła są widoczne w panelu Data.
 
+## Ważne: sharing aplikacji a dostęp do SharePoint
+
+Udostępnienie Canvas App nie nadaje automatycznie uprawnień do list SharePoint.
+
+Dla bezpośredniego modelu:
+
+```text
+Canvas App -> SharePoint
+```
+
+użytkownik końcowy pracuje na danych zgodnie ze swoimi uprawnieniami SharePoint. Connection developera nie powoduje impersonacji użytkowników.
+
+Przykład:
+
+```text
+Heniek udostępnia aplikację Marcinowi
+!=
+Marcin automatycznie dostaje dostęp do Contracts
+```
+
+Jeżeli Marcin ma korzystać bezpośrednio z `Contracts`, `Suppliers` i `ContractApprovals`, trzeba nadać mu odpowiednie uprawnienia do tych źródeł.
+
+Konto techniczne, np. `aplikacjaSharePoint`, ma sens dopiero wtedy, gdy operacje wykonuje warstwa pośrednia:
+
+```text
+Canvas App
+   |
+   v
+Power Automate
+   |
+   v
+SharePoint connection konta technicznego
+```
+
+Jeżeli użytkownik **nie powinien mieć bezpośredniego dostępu do listy**, nie projektuj galerii jako `Gallery.Items = Contracts`. Wtedy odczyty i zapisy również trzeba przenieść do kontrolowanej warstwy pośredniej.
+
 ---
 
 # Zadanie 3 – Ekran listy umów
