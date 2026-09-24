@@ -81,6 +81,8 @@ SharePoint - When an item is created or modified
    - Site Address: witryna szkoleniowa,
    - List Name: `Contracts`.
 
+> Trigger SharePoint jest event-driven, ale nie należy traktować go jak synchronicznego wywołania aplikacyjnego. Między zapisem elementu a rozpoczęciem flow może wystąpić opóźnienie. Jeżeli aplikacja ma świadomie uruchamiać proces natychmiast po akcji użytkownika, alternatywą jest flow typu instant z triggerem `Power Apps (V2)` wywoływany z Canvas App przez `.Run(...)`. W tym LAB pozostajemy przy triggerze SharePoint, żeby najpierw poznać model event-driven.
+
 ---
 
 # Zadanie 2 – Ograniczenie uruchomień
@@ -101,6 +103,8 @@ Status Value equals Submitted
 ```text
 Contract is not in Submitted state. Nothing to do.
 ```
+
+Gałąź `No` kończymy statusem `Succeeded`, a nie `Failed`, ponieważ brak stanu `Submitted` oznacza kontrolowane pominięcie pracy, a nie błąd techniczny.
 
 ## Wariant zaawansowany – Trigger Conditions
 
@@ -130,7 +134,43 @@ Dodaj `Update item` dla Contracts:
 - Status: `In Approval`,
 - pozostałe wymagane pola zmapuj z triggera.
 
-> to Update ponownie spełni trigger „created or modified”. Drugi run powinien zakończyć się, ponieważ Status nie jest już `Submitted`. W LAB 10 wykorzystamy tę sytuację do diagnostyki.
+> Standardowa akcja `Update item` może wymagać ponownego zmapowania kolumn oznaczonych w SharePoint jako Required. Wartości domyślne listy nie są mechanizmem automatycznego „dopisywania” brakujących pól podczas aktualizacji istniejącego rekordu.
+
+Jeżeli lista ma wiele wymaganych pól, alternatywą jest częściowa aktualizacja przez:
+
+```text
+SharePoint -> Send an HTTP request to SharePoint
+```
+
+Przykład zmiany tylko statusu:
+
+```text
+POST
+_api/web/lists/GetByTitle('Contracts')/items(@{triggerBody()?['ID']})
+```
+
+Headers:
+
+```text
+Accept: application/json;odata=nometadata
+Content-Type: application/json;odata=nometadata
+IF-MATCH: *
+X-HTTP-Method: MERGE
+```
+
+Body:
+
+```json
+{
+  "Status": "In Approval"
+}
+```
+
+Na tym etapie LAB użyj `Update item`, a wariant partial update potraktuj jako rozszerzenie.
+
+> Nie myl `SharePoint -> Send an HTTP request to SharePoint` z ogólną akcją `HTTP` używaną w LAB 04. To akcja konektora SharePoint do wywoływania SharePoint REST API; ogólna akcja HTTP ma inny model licencyjny i zastosowanie.
+
+> To Update ponownie spełni trigger „created or modified”. Drugi run powinien zakończyć się, ponieważ Status nie jest już `Submitted`. W LAB 10 wykorzystamy tę sytuację do diagnostyki.
 
 ---
 
@@ -374,6 +414,30 @@ Management   | 500000        | management@...
 ```
 
 Nie implementuj jeszcze. Narysuj rozwiązanie i zastanów się, czy konfiguracja powinna być przechowywana w SharePoint, Dataverse czy Environment Variables.
+
+---
+
+# Alternatywa: bezpośrednie wywołanie flow z Canvas App
+
+Jeżeli scenariusz wymaga, aby użytkownik po kliknięciu `Submit` uruchamiał proces bez czekania na SharePoint trigger, utwórz osobny instant cloud flow z triggerem:
+
+```text
+Power Apps (V2)
+```
+
+i parametrem wejściowym np.:
+
+```text
+ContractId
+```
+
+Wywołanie z Power Fx:
+
+```powerfx
+VCM_SubmitContract.Run(ThisItem.ID)
+```
+
+Flow powinien po swojej stronie ponownie pobrać rekord i zweryfikować stan oraz uprawnienia. Parametr z klienta nie jest dowodem autoryzacji.
 
 ---
 

@@ -40,6 +40,20 @@ Uruchomienie w tle:
 docker run -d --name vcm-mock-api -p 8080:8080 vcm-mock-api
 ```
 
+Jeśli Docker zwróci błąd, że nazwa `vcm-mock-api` jest już używana:
+
+```powershell
+docker ps -a
+docker start vcm-mock-api
+```
+
+albo odtwórz kontener:
+
+```powershell
+docker rm -f vcm-mock-api
+docker run -d --name vcm-mock-api -p 8080:8080 vcm-mock-api
+```
+
 Logi:
 
 ```powershell
@@ -204,6 +218,35 @@ curl -s -X PUT "$API/admin/mode" \
   -H 'Content-Type: application/json' \
   -d '{"mode":"error"}'
 ```
+
+### Sterowanie trybem z PowerShell
+
+```powershell
+$API = "https://<twoj-adres>.trycloudflare.com"
+
+# 201
+Invoke-RestMethod -Method Put -Uri "$API/admin/mode" -ContentType "application/json" -Body '{"mode":"success"}'
+
+# 409
+Invoke-RestMethod -Method Put -Uri "$API/admin/mode" -ContentType "application/json" -Body '{"mode":"conflict"}'
+
+# 429
+Invoke-RestMethod -Method Put -Uri "$API/admin/mode" -ContentType "application/json" -Body '{"mode":"throttle"}'
+
+# 500
+Invoke-RestMethod -Method Put -Uri "$API/admin/mode" -ContentType "application/json" -Body '{"mode":"error"}'
+
+# timeout
+Invoke-RestMethod -Method Put -Uri "$API/admin/mode" -ContentType "application/json" -Body '{"mode":"timeout"}'
+```
+
+Sprawdzenie:
+
+```powershell
+Invoke-RestMethod "$API/admin/mode"
+```
+
+> Przy wielu uczestnikach preferuj sterowanie odpowiedzią numerem umowy lub nagłówkiem `x-mock-mode`, ponieważ `/admin/mode` zmienia zachowanie całej wspólnej instancji API.
 
 Reset pamięci przed kolejną grupą:
 

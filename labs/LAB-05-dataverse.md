@@ -23,6 +23,26 @@ Po laboratorium uczestnik potrafi:
 
 Środowisko z Dataverse oraz uprawnienia maker.
 
+## Checkpoint przed LAB
+
+Przed większymi zmianami w modelu warto utworzyć ręczny backup środowiska, jeżeli typ środowiska i uprawnienia na to pozwalają:
+
+```text
+Power Platform admin center
+-> Environments
+-> <środowisko>
+-> Backup & Restore
+-> utwórz manual backup
+```
+
+Przykładowa nazwa:
+
+```text
+Before LAB05 Dataverse model
+```
+
+Backup środowiska jest mechanizmem platformy – nie jest to plik `.bak` do pobrania. Przywrócenie całego środowiska jest operacją znacznie szerszą niż odtworzenie pojedynczej tabeli, dlatego traktuj je jako checkpoint awaryjny.
+
 ---
 
 # Model końcowy
@@ -170,6 +190,8 @@ Dodaj:
 
 Default Status = Draft.
 
+> Logical/schema name tabeli i kolumn zależy od prefixu Publishera użytego przy tworzeniu komponentu. Jeżeli środowisko ma np. prefix `vcmmt`, tabela może mieć logical name `vcmmt_contract`. Display name `Contract` i logical name to dwie różne rzeczy.
+
 ## Alternate key
 
 Utwórz:
@@ -244,56 +266,183 @@ Dodaj:
 
 Ustal, że log jest **append-oriented**: proces tworzy kolejne rekordy zamiast nadpisywać jeden „ostatni błąd”.
 
+Nie istnieje przełącznik Dataverse:
+
+```text
+Append-oriented = On
+```
+
+To decyzja projektowa. Każde istotne zdarzenie procesu powinno wykonywać:
+
+```text
+Dataverse -> Add a new row
+```
+
+zamiast aktualizować poprzedni wpis przez `Update a row`.
+
+Przykładowy timeline:
+
+```text
+10:15  API Call   Error        HTTP 500
+10:16  Retry      Information  Retry started
+10:16  API Call   Information  HTTP 201
+```
+
+Każda linia to osobny rekord `Process Log`. Dzięki temu nie tracimy historii wcześniejszych prób i możemy odtworzyć przebieg po `Correlation ID`.
+
+Jeżeli architektura wymaga mocniejszego wymuszenia tej zasady, rola używana przez proces może mieć dla `Process Log`:
+
+```text
+Create = Yes
+Read   = Yes
+Write  = No
+Delete = No
+```
+
+Nie jest to wymagane do ukończenia LAB, ale dobrze pokazuje różnicę pomiędzy konwencją aplikacyjną a wymuszeniem security.
+
 ---
 
 # Zadanie 8 – Auditing
 
-Włącz auditing zgodnie z aktualnym interfejsem środowiska.
+Auditing musi być świadomie skonfigurowany na odpowiednich poziomach.
 
-Minimum:
+## 8.1 Auditing środowiska
 
-- table Contract,
-- kolumny Status,
+W Power Platform admin center sprawdź ustawienia audytu środowiska:
+
+```text
+Environment
+-> Settings
+-> Audit and logs / Audit settings
+```
+
+Nazwy sekcji mogą się nieznacznie różnić w bieżącym interfejsie.
+
+## 8.2 Auditing tabeli i kolumn
+
+Włącz auditing dla tabeli `Contract`.
+
+Minimum dla kolumn:
+
+- Status,
 - Amount,
 - Supplier,
 - Valid To,
 - External System ID.
 
-> Auditing może wymagać włączenia na poziomie środowiska. 
+Audyt zaczyna rejestrować zmiany od momentu jego włączenia. Nie oczekuj historii zmian wykonanych wcześniej.
 
-Po włączeniu:
+## 8.3 Test
 
-1. zmień Status testowej umowy,
-2. zapisz,
-3. otwórz audit history rekordu, jeśli UI i uprawnienia to umożliwiają,
-4. znajdź zmianę starej i nowej wartości.
+1. Utwórz lub otwórz testową umowę.
+2. Ustaw np. `Status = Submitted`.
+3. Zapisz.
+4. Zmień status na `In Approval`.
+5. Zapisz ponownie.
+
+## 8.4 Gdzie sprawdzić Audit History
+
+Najczytelniej robi się to z formularza konkretnego rekordu w Model-driven app:
+
+```text
+Model-driven app
+-> Contracts
+-> otwórz konkretny rekord
+-> Related / Powiązane
+-> Audit History
+```
+
+W zależności od wersji UI opcja może być też schowana pod menu `...`.
+
+> Widok `Tables -> Contract -> Data` w make.powerapps.com jest edytorem danych tabeli i nie pokazuje tego samego menu `Related` co formularz rekordu w Model-driven app.
+
+W historii znajdź zmianę starej i nowej wartości, np.:
+
+```text
+Status: Submitted -> In Approval
+```
 
 ---
 
 # Zadanie 9 – Security role
 
-Utwórz rolę:
+Utwórz **Dataverse Security Role**:
 
 ```text
 VCM Contract User
 ```
 
-Minimalny cel szkoleniowy:
+Nie myl jej z rolą środowiskową `Environment Maker`. Rola maker pozwala tworzyć komponenty w środowisku, ale nie zastępuje uprawnień do danych wynikających z Dataverse security roles.
 
-- Supplier: Read,
-- Contract: Create, Read, Write,
-- Approval: Read,
-- Process Log: Read – opcjonalnie ogranicz do wsparcia technicznego.
+## 9.1 Wariant szkoleniowy dla User or team owned
 
-Zakres uprawnień dopasuj do modelu ownership.
+Dla rekomendowanego ownership `User or team owned` ustaw przykładowo:
 
-Następnie utwórz drugą rolę koncepcyjnie:
+| Table | Privilege | Access level |
+|---|---|---|
+| Supplier | Read | Organization |
+| Supplier | Append To | Organization |
+| Contract | Create | User |
+| Contract | Read | User |
+| Contract | Write | User |
+| Contract | Append | User |
+| Contract | Append To | User |
+| Approval | Read | Organization |
+| Process Log | Read | Organization |
+
+Na tym etapie nie dawaj automatycznie `Delete`, `Assign` i `Share`, jeśli proces ich nie wymaga.
+
+## 9.2 Dlaczego Append / Append To
+
+Samo `Read` nie zawsze wystarczy do pracy z lookupami.
+
+Dla relacji:
+
+```text
+Contract -> Supplier
+```
+
+użytkownik musi mieć odpowiednie uprawnienia pozwalające powiązać rekordy. W uproszczeniu szkoleniowym:
+
+```text
+Contract -> Append
+Supplier -> Append To
+```
+
+Analogicznie trzeba przeanalizować lookupi:
+
+```text
+Approval -> Contract
+Process Log -> Contract
+```
+
+gdy użytkownik lub flow ma tworzyć takie rekordy.
+
+## 9.3 Trzy osobne pojęcia
+
+```text
+Security Role
+= jakie operacje użytkownik może wykonać
+
+Ownership
+= kto jest właścicielem rekordu
+
+Access level
+= jak szeroki jest zakres rekordu dla danego privilege
+```
+
+Dla tabel User or team owned poziom `User` dobrze pokazuje row-level security: użytkownik może mieć `Read` do Contract, ale tylko dla rekordów w swoim zakresie.
+
+## 9.4 Administrator
+
+Utwórz drugą rolę koncepcyjnie:
 
 ```text
 VCM Contract Administrator
 ```
 
-z szerszymi uprawnieniami.
+z szerszymi uprawnieniami, np. organizacyjnym Create/Read/Write dla tabel biznesowych. `Delete`, `Assign` i `Share` dodawaj tylko, jeżeli wymagają tego zadania administratora.
 
 Omów zasadę least privilege.
 
@@ -311,6 +460,26 @@ Status = Submitted
 ```
 
 Dodaj jeden Approval oraz jeden ProcessLog.
+
+## Gdy lookup Supplier nic nie pokazuje
+
+Jeżeli ręcznie utworzyłeś rekord `Supplier`, ale lookup w `Contract` jest pusty:
+
+1. potwierdź, że pracujesz w tym samym Environment,
+2. otwórz `Tables -> Supplier -> Data` i sprawdź, czy rekord istnieje,
+3. w `Contract` sprawdź definicję kolumny `Supplier`:
+   - Type = Lookup,
+   - Related table = Supplier,
+4. użyj przycisku `Refresh` w pasku nad widokiem danych tabeli,
+5. ponownie otwórz lookup.
+
+W widoku danych przycisk znajduje się typowo obok:
+
+```text
+New row | New column | Refresh | ...
+```
+
+Samo utworzenie definicji tabeli `Contract` nie kopiuje danych z SharePoint do Dataverse. Migracja danych jest osobnym krokiem w LAB 06.
 
 ---
 
@@ -342,6 +511,32 @@ Uzupełnij tabelę podczas zajęć:
 
 ---
 
+# Awaryjne odtworzenie modelu
+
+Usunięcie całej custom table to nie to samo co usunięcie pojedynczego row. Deleted records / recycle mechanizmy dla rekordów nie są mechanizmem przywracania definicji tabeli.
+
+Jeżeli tabela została przypadkowo usunięta:
+
+1. dla świeżego LAB zwykle najszybciej odtworzyć ją z definicji w tym dokumencie,
+2. jeżeli środowisko zawiera ważne dane i zależności, rozważ restore całego środowiska z backupu,
+3. sprawdź relacje w tabelach zależnych, ponieważ lookupi do usuniętej tabeli mogły również zniknąć,
+4. po ręcznym odtworzeniu sprawdź flowy i aplikacje, które odwoływały się do poprzedniego komponentu.
+
+Przykład dla usuniętego `Contract`:
+
+```text
+Contract
++ Supplier lookup
++ alternate key
++ auditing
++ Approval -> Contract
++ Process Log -> Contract
+```
+
+Model można również provisionować skryptem przez Dataverse Web API / narzędzia ALM. Na szkoleniu robimy model ręcznie, aby uczestnik poznał interfejs i zależności; automatyzacja provisioningu jest dobrym rozszerzeniem dla repozytorium developerskiego.
+
+---
+
 # Kryterium ukończenia
 
 - 4 tabele istnieją w Solution,
@@ -363,3 +558,6 @@ Talk track: **Source of Truth**, State Machine. Pełna ścieżka statusów VCM, 
 - Column data types: https://learn.microsoft.com/en-us/power-apps/maker/data-platform/types-of-fields
 - Build your data model with Dataverse: https://learn.microsoft.com/en-us/training/paths/build-data-model-microsoft-dataverse/
 - Manage Dataverse auditing: https://learn.microsoft.com/en-us/power-platform/admin/manage-dataverse-auditing
+- Security roles and privileges: https://learn.microsoft.com/en-us/power-platform/admin/security-roles-privileges
+- Backup and restore environments: https://learn.microsoft.com/en-us/power-platform/admin/backup-restore-environments
+- Dataverse Web API metadata: https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/create-update-entity-definitions-using-web-api
